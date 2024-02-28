@@ -2,8 +2,8 @@
 #include "Vector.hpp"
 #include <chrono>
 #include "Render.hpp"
-#include "offsets.hpp"
-#include "client.dll.hpp"
+#include "offsets/offsets.hpp"
+#include "offsets/client.dll.hpp"
 #include "Global.hpp"
 #include <Windows.h>
 #include <TlHelp32.h>

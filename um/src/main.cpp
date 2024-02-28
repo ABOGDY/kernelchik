@@ -14,10 +14,9 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/imgui_impl_dx11.h"
 
-#include "client.dll.hpp"
-#include "offsets.hpp"
+#include "offsets/client.dll.hpp"
+#include "offsets/offsets.hpp"
 #include "Vector.hpp"
-#include "imgui.h"
 #include "Cheats.hpp"
 #include "Render.hpp"
 
