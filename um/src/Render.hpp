@@ -107,7 +107,7 @@ namespace Menus
 					{
 						bool b = false;
 
-						ImGui::LogText("closestvectrx");
+						ImGui::LabelText("<closestvectrx>","xui");
 
 					}
 					ImGui::EndChild();

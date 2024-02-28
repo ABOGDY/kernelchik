@@ -166,12 +166,31 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="src\animationsystem.dll.hpp" />
     <ClInclude Include="src\Cheats.hpp" />
     <ClInclude Include="src\client.dll.hpp" />
+    <ClInclude Include="src\engine2.dll.hpp" />
     <ClInclude Include="src\Global.hpp" />
+    <ClInclude Include="src\host.dll.hpp" />
+    <ClInclude Include="src\interfaces.hpp" />
+    <ClInclude Include="src\materialsystem2.dll.hpp" />
+    <ClInclude Include="src\meshsystem.dll.hpp" />
+    <ClInclude Include="src\networksystem.dll.hpp" />
     <ClInclude Include="src\offsets.hpp" />
+    <ClInclude Include="src\panorama.dll.hpp" />
+    <ClInclude Include="src\particles.dll.hpp" />
+    <ClInclude Include="src\pulse_system.dll.hpp" />
     <ClInclude Include="src\Render.hpp" />
+    <ClInclude Include="src\rendersystemdx11.dll.hpp" />
+    <ClInclude Include="src\resourcesystem.dll.hpp" />
+    <ClInclude Include="src\scenefilecache.dll.hpp" />
+    <ClInclude Include="src\scenesystem.dll.hpp" />
+    <ClInclude Include="src\schemasystem.dll.hpp" />
+    <ClInclude Include="src\server.dll.hpp" />
+    <ClInclude Include="src\soundsystem.dll.hpp" />
     <ClInclude Include="src\Vector.hpp" />
+    <ClInclude Include="src\vphysics2.dll.hpp" />
+    <ClInclude Include="src\worldrenderer.dll.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
