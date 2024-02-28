@@ -75,7 +75,7 @@ struct Vectorr3
 {
 	float x, y, z;
 };
-struct Vector2
+struct Vectorr2
 {
 	float x, y;
 };
@@ -159,8 +159,8 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 			wc.lpszClassName = " ";
 
 			RegisterClassExA(&wc);
-
-			const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, 0, 0, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
+			const HWND Overlay = FindWindowA(NULL, "Counter-Strike 2");
+			//const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, 0, 0, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
 
 			SetLayeredWindowAttributes(Overlay, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 
