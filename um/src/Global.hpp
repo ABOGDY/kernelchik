@@ -19,4 +19,4 @@ float EnemyFrameColor[3];
 int TeamActiveCombo;
 int EnemyActiveCombo;
 const char* ComboSelections[3] = { "2D Box", "3D Box", "Corners" };
-bool Bhop;
+bool Bhop; //pidara
