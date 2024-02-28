@@ -281,6 +281,7 @@ namespace Cheats
             }
         }
     }
+    //юбюошбош
     void fovJChanger(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
         const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
         const DWORD pid = ProcessId;
