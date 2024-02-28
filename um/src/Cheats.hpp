@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector.hpp"
+#include <chrono>
 #include "Render.hpp"
 #include "offsets.hpp"
 #include "client.dll.hpp"
@@ -341,6 +342,254 @@ namespace Cheats
         driver::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
     }
 
-    
+
+
+
+    enum BONEINDEX : DWORD
+    {
+        head = 6,
+        neck_0 = 5,
+        spine_1 = 4,
+        spine_2 = 2,
+        pelvis = 0,
+        arm_upper_L = 8,
+        arm_lower_L = 9,
+        hand_L = 10,
+        arm_upper_R = 13,
+        arm_lower_R = 14,
+        hand_R = 15,
+        hand_R2 = 16,
+        leg_upper_L = 22,
+        leg_lower_L = 23,
+        ankle_L = 24,
+        leg_upper_R = 25,
+        leg_lower_R = 26,
+        ankle_R = 27,
+    };
+
+    struct BoneJointData
+    {
+        Vector3 Pos;
+        char pad[0x14];
+    };
+
+    struct BoneJointPos
+    {
+        Vector3 Pos;
+        Vector2 ScreenPos;
+        bool IsVisible = false;
+    };
+
+    class CBone
+    {
+    private:
+        DWORD64 EntityPawnAddress = 0;
+    public:
+        std::vector<BoneJointPos> BonePosList;
+
+        bool UpdateAllBoneData(const DWORD64& EntityPawnAddress);
+    };
+
+  
+
+
+
+
+
+
+
+    class PlayerController
+    {
+    public:
+        DWORD64 Address = 0;
+        int Money = 0;
+        int CashSpent = 0;
+        int CashSpentTotal = 0;
+        int TeamID = 0;
+        int Health = 0;
+        int AliveStatus = 0;
+        DWORD Pawn = 0;
+        std::string PlayerName;
+    public:
+        bool GetMoney();
+        bool GetTeamID();
+        bool GetHealth();
+        bool GetIsAlive();
+        bool GetPlayerName();
+        DWORD64 GetPlayerPawnAddress();
+    };
+
+    class PlayerPawn
+    {
+    public:
+        enum class Flags
+        {
+            NONE,
+            IN_AIR = 1 << 0
+        };
+
+        DWORD64 Address = 0;
+        CBone BoneData;
+        Vector2 ViewAngle;
+        Vector3 Pos;
+        Vector2 ScreenPos;
+        Vector3 CameraPos;
+        Vector3 vec_origin;
+        std::string WeaponName;
+        DWORD ShotsFired;
+        Vector2 AimPunchAngle;
+        c_utl_vector AimPunchCache;
+        cs_weapon_type weapon_type;
+        int Health;
+        int Ammo;
+        int MaxAmmo;
+        int TeamID;
+        int Fov;
+        DWORD64 bSpottedByMask;
+        int fFlags;
+        float sensitivity;
+
+    public:
+        bool GetPos();
+        bool GetViewAngle();
+        bool GetCameraPos();
+        bool GetWeaponName();
+        bool GetShotsFired();
+        bool GetAimPunchAngle();
+        bool GetHealth();
+        bool GetTeamID();
+        bool GetSensitivity();
+        bool GetFov();
+        bool GetSpotted();
+        bool GetFFlags();
+        bool GetAimPunchCache();
+        bool GetVecOrigin();
+        bool GetAmmo();
+        bool GetMaxAmmo();
+        bool GetWeaponType();
+
+        constexpr bool HasFlag(const Flags Flag) const noexcept {
+            return fFlags & (int)Flag;
+        }
+    };
+
+    class Client
+    {
+    public:
+        float Sensitivity;
+
+    public:
+        bool GetSensitivity();
+    };
+
+    class CEntity
+    {
+    public:
+        PlayerController Controller;
+        PlayerPawn Pawn;
+        Client Client;
+    public:
+        bool UpdateController(const DWORD64& PlayerControllerAddress);
+        bool UpdatePawn(const DWORD64& PlayerPawnAddress);
+        bool UpdateClientData();
+        bool IsAlive();
+        bool IsInScreen();
+        CBone GetBone() const;
+    };
+   
+
+
+
+
+
+
+
+    //trigger
+    DWORD uHandle = 0;
+    DWORD64 ListEntry = 0;
+    DWORD64 PawnAddress = 0;
+    CEntity Entity;
+    bool allow_shoot = false;
+    inline int trigger_delay = 5;
+    inline int fake_shot_delay = 20;
+    inline int hotkey = VK_LMENU;
+
+    void triggerbot::release_mouse_event()
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(fake_shot_delay));
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+
+
+    void triggerbot::run(const CEntity& LocalEntity)
+    {
+        if (!_proc_manager.read_memory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle))
+            return;
+        if (uHandle == -1)
+            return;
+
+        ListEntry = _proc_manager.trace_address(g_game.get_entity_list_address(), { 0x8 * (uHandle >> 9) + 0x10,0x0 });
+        if (ListEntry == 0)
+            return;
+
+        if (!_proc_manager.read_memory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
+            return;
+
+        if (!Entity.UpdatePawn(PawnAddress))
+            return;
+
+        if (LocalEntity.Pawn.weapon_type == cs_weapon_type::weapon_type_knife)
+            return;
+        if (LocalEntity.Pawn.weapon_type == cs_weapon_type::weapon_type_grenade)
+            return;
+        if (LocalEntity.Pawn.weapon_type == cs_weapon_type::weapon_type_c4)
+            return;
+
+        if (angel::_settings->team_check)
+            allow_shoot = LocalEntity.Pawn.TeamID != Entity.Pawn.TeamID && Entity.Pawn.Health > 0;
+        else
+            allow_shoot = Entity.Pawn.Health > 0;
+
+        if (!allow_shoot)
+            return;
+
+        static std::chrono::time_point last_point = std::chrono::steady_clock::now();
+        auto cur_point = std::chrono::steady_clock::now();
+        if (cur_point - last_point >= std::chrono::milliseconds(trigger_delay))
+        {
+            const bool shooting = GetAsyncKeyState(VK_LBUTTON) < 0;
+            if (!shooting)
+            {
+                mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+                std::thread trigger_thread(release_mouse_event);
+                trigger_thread.detach();
+            }
+            last_point = cur_point;
+        }
+    }
+
+    void triggerbot::target_check(const CEntity& LocalEntity) noexcept
+    {
+        if (!_proc_manager.read_memory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle) || uHandle == -1)
+        {
+            angel::_settings->is_aim = false;
+        }
+        else
+        {
+            ListEntry = _proc_manager.trace_address(g_game.get_entity_list_address(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
+            if (ListEntry != 0)
+            {
+                if (_proc_manager.read_memory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
+                {
+                    if (Entity.UpdatePawn(PawnAddress))
+                    {
+                        angel::_settings->is_aim = angel::_settings->crosshair_team_check ? (LocalEntity.Pawn.TeamID != Entity.Pawn.TeamID) : true;
+                        return;
+                    }
+                }
+            }
+            angel::_settings->is_aim = false;
+        }
+    }
 }
 
