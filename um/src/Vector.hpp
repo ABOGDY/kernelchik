@@ -12,6 +12,58 @@ struct view_matrix_t
 
 	float matrix[4][4];
 };
+struct Vector2
+{
+	Vector2(
+		const float x = 0.f,
+		const float y = 0.f) noexcept :
+		x(x), y(y) { }
+	const Vector2 operator+(const Vector2& other) const noexcept
+	{
+		return Vector2{ x + other.x, y + other.y };
+	}
+	const Vector2 operator-(const Vector2& other) const noexcept
+	{
+		return Vector2{ x - other.x, y - other.y };
+	}
+	const Vector2 operator*(const Vector2& other) const noexcept
+	{
+		return { x * other.x,y * other.y };
+	}
+	const Vector2 operator/(const Vector2& other) const noexcept
+	{
+		return { x / other.x,y / other.y };
+	}
+	const Vector2 operator*(const float factor) const noexcept
+	{
+		return Vector2{ x * factor, y * factor};
+	}
+	const Vector2 operator/(const float factor) const noexcept
+	{
+		return Vector2{ x / factor, y / factor};
+	}
+	bool operator==(const Vector2& other) const noexcept
+	{
+		return x == other.x && y == other.y;
+	}
+	bool operator!=(const Vector2& other) const noexcept
+	{
+		return x != other.x || y != other.y;
+	}
+	ImVec2 ToImVec2()
+	{
+		return ImVec2(x, y);
+	}
+	float Length()
+	{
+		return sqrtf(powf(x, 2) + powf(y, 2));
+	}
+	float DistanceTo(const Vector2& Pos)
+	{
+		return sqrtf(powf(Pos.x - x, 2) + powf(Pos.y - y, 2));
+	}
+	float x, y;
+};
 struct Vector3
 {
 	// constructor
@@ -41,8 +93,15 @@ struct Vector3
 	{
 		return Vector3{ x * factor, y * factor, z * factor };
 	}
-
 	// utils
+	float Length()
+	{
+		return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
+	}
+	float DistanceTo(const Vector3& Pos)
+	{
+		return sqrtf(powf(Pos.x - x, 2) + powf(Pos.y - y, 2) + powf(Pos.z - z, 2));
+	}
 	const Vector3 ToAngle() const noexcept
 	{
 		return Vector3{
