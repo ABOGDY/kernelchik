@@ -49,6 +49,18 @@ namespace driver {
         DeviceIoControl(driver_handle, codes::write, &r, sizeof(r), &r, sizeof(r), nullptr, nullptr);
     }
 }
+struct BoneJointData
+{
+    Vector3 Pos;
+    char pad[0x14];
+};
+struct BoneJointPos
+{
+    Vector3 Pos;
+    Vector2 ScreenPos;
+    bool IsVisible = false;
+};
+
 namespace Cheats
 {
     void espLoop(const int ProcessId, uintptr_t Client, uintptr_t Engine)
@@ -281,7 +293,8 @@ namespace Cheats
                     Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), height / 60, ImColor(1.f, 0.f, 0.f));
             }
         }
-    }
+    
+}
     //¿¬¿œ€¬œ€
     void fovJChanger(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
         const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -342,254 +355,147 @@ namespace Cheats
         driver::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
     }
 
-
-
-
-    enum BONEINDEX : DWORD
-    {
-        head = 6,
-        neck_0 = 5,
-        spine_1 = 4,
-        spine_2 = 2,
-        pelvis = 0,
-        arm_upper_L = 8,
-        arm_lower_L = 9,
-        hand_L = 10,
-        arm_upper_R = 13,
-        arm_lower_R = 14,
-        hand_R = 15,
-        hand_R2 = 16,
-        leg_upper_L = 22,
-        leg_lower_L = 23,
-        ankle_L = 24,
-        leg_upper_R = 25,
-        leg_lower_R = 26,
-        ankle_R = 27,
-    };
-
-    struct BoneJointData
-    {
-        Vector3 Pos;
-        char pad[0x14];
-    };
-
-    struct BoneJointPos
-    {
-        Vector3 Pos;
-        Vector2 ScreenPos;
-        bool IsVisible = false;
-    };
-
-    class CBone
-    {
-    private:
-        DWORD64 EntityPawnAddress = 0;
-    public:
-        std::vector<BoneJointPos> BonePosList;
-
-        bool UpdateAllBoneData(const DWORD64& EntityPawnAddress);
-    };
-
-  
-
-
-
-
-
-
-
-    class PlayerController
-    {
-    public:
-        DWORD64 Address = 0;
-        int Money = 0;
-        int CashSpent = 0;
-        int CashSpentTotal = 0;
-        int TeamID = 0;
-        int Health = 0;
-        int AliveStatus = 0;
-        DWORD Pawn = 0;
-        std::string PlayerName;
-    public:
-        bool GetMoney();
-        bool GetTeamID();
-        bool GetHealth();
-        bool GetIsAlive();
-        bool GetPlayerName();
-        DWORD64 GetPlayerPawnAddress();
-    };
-
-    class PlayerPawn
-    {
-    public:
-        enum class Flags
+    void TriggerBot(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
+        enum BONEINDEX : DWORD
         {
-            NONE,
-            IN_AIR = 1 << 0
+            head = 6,
+            neck_0 = 5,
+            spine_1 = 4,
+            spine_2 = 2,
+            pelvis = 0,
+            arm_upper_L = 8,
+            arm_lower_L = 9,
+            hand_L = 10,
+            arm_upper_R = 13,
+            arm_lower_R = 14,
+            hand_R = 15,
+            hand_R2 = 16,
+            leg_upper_L = 22,
+            leg_lower_L = 23,
+            ankle_L = 24,
+            leg_upper_R = 25,
+            leg_lower_R = 26,
+            ankle_R = 27,
         };
-
-        DWORD64 Address = 0;
-        CBone BoneData;
-        Vector2 ViewAngle;
-        Vector3 Pos;
-        Vector2 ScreenPos;
-        Vector3 CameraPos;
-        Vector3 vec_origin;
-        std::string WeaponName;
-        DWORD ShotsFired;
-        Vector2 AimPunchAngle;
-        c_utl_vector AimPunchCache;
-        cs_weapon_type weapon_type;
-        int Health;
-        int Ammo;
-        int MaxAmmo;
-        int TeamID;
-        int Fov;
-        DWORD64 bSpottedByMask;
-        int fFlags;
-        float sensitivity;
-
-    public:
-        bool GetPos();
-        bool GetViewAngle();
-        bool GetCameraPos();
-        bool GetWeaponName();
-        bool GetShotsFired();
-        bool GetAimPunchAngle();
-        bool GetHealth();
-        bool GetTeamID();
-        bool GetSensitivity();
-        bool GetFov();
-        bool GetSpotted();
-        bool GetFFlags();
-        bool GetAimPunchCache();
-        bool GetVecOrigin();
-        bool GetAmmo();
-        bool GetMaxAmmo();
-        bool GetWeaponType();
-
-        constexpr bool HasFlag(const Flags Flag) const noexcept {
-            return fFlags & (int)Flag;
-        }
-    };
-
-    class Client
-    {
-    public:
-        float Sensitivity;
-
-    public:
-        bool GetSensitivity();
-    };
-
-    class CEntity
-    {
-    public:
-        PlayerController Controller;
-        PlayerPawn Pawn;
-        Client Client;
-    public:
-        bool UpdateController(const DWORD64& PlayerControllerAddress);
-        bool UpdatePawn(const DWORD64& PlayerPawnAddress);
-        bool UpdateClientData();
-        bool IsAlive();
-        bool IsInScreen();
-        CBone GetBone() const;
-    };
-   
-
-
-
-
-
-
-
-    //trigger
-    DWORD uHandle = 0;
-    DWORD64 ListEntry = 0;
-    DWORD64 PawnAddress = 0;
-    CEntity Entity;
-    bool allow_shoot = false;
-    inline int trigger_delay = 5;
-    inline int fake_shot_delay = 20;
-    inline int hotkey = VK_LMENU;
-
-    void triggerbot::release_mouse_event()
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(fake_shot_delay));
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-    }
-
-
-    void triggerbot::run(const CEntity& LocalEntity)
-    {
-        if (!_proc_manager.read_memory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle))
-            return;
-        if (uHandle == -1)
-            return;
-
-        ListEntry = _proc_manager.trace_address(g_game.get_entity_list_address(), { 0x8 * (uHandle >> 9) + 0x10,0x0 });
-        if (ListEntry == 0)
-            return;
-
-        if (!_proc_manager.read_memory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
-            return;
-
-        if (!Entity.UpdatePawn(PawnAddress))
-            return;
-
-        if (LocalEntity.Pawn.weapon_type == cs_weapon_type::weapon_type_knife)
-            return;
-        if (LocalEntity.Pawn.weapon_type == cs_weapon_type::weapon_type_grenade)
-            return;
-        if (LocalEntity.Pawn.weapon_type == cs_weapon_type::weapon_type_c4)
-            return;
-
-        if (angel::_settings->team_check)
-            allow_shoot = LocalEntity.Pawn.TeamID != Entity.Pawn.TeamID && Entity.Pawn.Health > 0;
-        else
-            allow_shoot = Entity.Pawn.Health > 0;
-
-        if (!allow_shoot)
-            return;
-
-        static std::chrono::time_point last_point = std::chrono::steady_clock::now();
-        auto cur_point = std::chrono::steady_clock::now();
-        if (cur_point - last_point >= std::chrono::milliseconds(trigger_delay))
+        enum cs_weapon_type : std::uint32_t
         {
-            const bool shooting = GetAsyncKeyState(VK_LBUTTON) < 0;
-            if (!shooting)
+            weapon_type_knife = 0,
+            weapon_type_pistol = 1,
+            weapon_type_submachinegun = 2,
+            weapon_type_rifle = 3,
+            weapon_type_shotgun = 4,
+            weapon_type_sniper_rifle = 5,
+            weapon_type_machinegun = 6,
+            weapon_type_c4 = 7,
+            weapon_type_taser = 8,
+            weapon_type_grenade = 9,
+            weapon_type_equipment = 10,
+            weapon_type_stackable_item = 11,
+            weapon_type_fists = 12,
+            weapon_type_breach_charge = 13,
+            weapon_type_bump_mine = 14,
+            weapon_type_tablet = 15,
+            weapon_type_melee = 16,
+            weapon_type_shield = 17,
+            weapon_type_zone_repulsor = 18,
+            weapon_type_unknown = 19,
+        };
+        //trigger
+        closestvectrx = 0;
+        const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        const DWORD pid = ProcessId;
+        const std::uintptr_t client = Client;
+        const std::uintptr_t engine = Engine;
+
+        uintptr_t LocalPlayerPawn = driver::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        uintptr_t Entity = driver::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
+        view_matrix_t viewMatrix = driver::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
+        Vector3 locang = driver::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
+        uint64_t plscene = driver::read_memory<uint64_t>(driver, LocalPlayerPawn + C_BaseEntity::m_pGameSceneNode);
+        int myHealth = driver::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
+        int myTeam = driver::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
+        int myWeapon = driver::read_memory<int>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
+        //driver::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x + 1, locang.y + 1, locang.z + 0));
+        
+        if (myWeapon != cs_weapon_type::weapon_type_knife && myWeapon != cs_weapon_type::weapon_type_grenade && myWeapon != cs_weapon_type::weapon_type_c4)
+        {
+            Vector3 closestang = Vector3(0,0,0);
+            for (int i = 1; i < 64; i++)
             {
-                mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-                std::thread trigger_thread(release_mouse_event);
-                trigger_thread.detach();
-            }
-            last_point = cur_point;
-        }
-    }
+                uintptr_t listEntity = driver::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
+                if (listEntity == 0)
+                    continue;
 
-    void triggerbot::target_check(const CEntity& LocalEntity) noexcept
-    {
-        if (!_proc_manager.read_memory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle) || uHandle == -1)
-        {
-            angel::_settings->is_aim = false;
-        }
-        else
-        {
-            ListEntry = _proc_manager.trace_address(g_game.get_entity_list_address(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
-            if (ListEntry != 0)
-            {
-                if (_proc_manager.read_memory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
-                {
-                    if (Entity.UpdatePawn(PawnAddress))
-                    {
-                        angel::_settings->is_aim = angel::_settings->crosshair_team_check ? (LocalEntity.Pawn.TeamID != Entity.Pawn.TeamID) : true;
-                        return;
+                uintptr_t entityController = driver::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
+                if (entityController == 0)
+                    continue;
+
+                uintptr_t entityControllerPawn = driver::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
+                if (entityControllerPawn == 0)
+                    continue;
+
+                listEntity = driver::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
+                if (listEntity == 0)
+                    continue;
+
+                uintptr_t entityPawn = driver::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
+                if (entityPawn == 0)
+                    continue;
+
+                //Entity Values
+                int playerTeam = driver::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
+                int playerHealth = driver::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
+                int playerArmor = driver::read_memory<int>(driver, entityPawn + C_CSPlayerPawnBase::m_ArmorValue);
+
+                if (playerHealth <= 1 || playerHealth > 100)
+                    continue;
+
+                if (entityPawn == LocalPlayerPawn)
+                    continue;
+
+                //Rendering
+
+
+                //Bones Pointer
+                uint64_t gameScene = driver::read_memory<uint64_t>(driver, entityPawn + C_BaseEntity::m_pGameSceneNode);
+
+                //Entity Feet
+                Vector3 origin = driver::read_memory<Vector3>(driver, gameScene + CGameSceneNode::m_vecOrigin);
+                Vector3 plorig = driver::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vecOrigin);
+                //Bones
+                uint64_t boneArray = driver::read_memory<uint64_t>(driver, gameScene + CSkeletonInstance::m_modelState + 0x80);
+                Vector3 playerHead = driver::read_memory<Vector3>(driver, boneArray + 6 * 32);
+                Vector3 playerNeck = driver::read_memory<Vector3>(driver, boneArray + 5 * 32);
+                Vector3 playerShoulderL = driver::read_memory<Vector3>(driver, boneArray + 13 * 32);
+                Vector3 playerShoulderR = driver::read_memory<Vector3>(driver, boneArray + 8 * 32);
+                Vector3 playerForeL = driver::read_memory<Vector3>(driver, boneArray + 14 * 32);
+                Vector3 playerForeR = driver::read_memory<Vector3>(driver, boneArray + 9 * 32);
+                Vector3 playerHandL = driver::read_memory<Vector3>(driver, boneArray + 16 * 32);
+                Vector3 playerHandR = driver::read_memory<Vector3>(driver, boneArray + 11 * 32);
+                Vector3 playerWaist = driver::read_memory<Vector3>(driver, boneArray + 0 * 32);
+                Vector3 playerKneeL = driver::read_memory<Vector3>(driver, boneArray + 26 * 32);
+                Vector3 playerKneeR = driver::read_memory<Vector3>(driver, boneArray + 23 * 32);
+                Vector3 playerFeetL = driver::read_memory<Vector3>(driver, boneArray + 27 * 32);
+                Vector3 playerFeetR = driver::read_memory<Vector3>(driver, boneArray + 24 * 32);
+
+                Vector3 diffvec3 = playerHead - plorig ;
+                float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / M_PI);
+                //float diffy = std::atan2(diffvec3.x, diffvec3.z) * (180 / M_PI);
+                if (abs(closestang.x) < abs(diffx)) {
+                    closestang.x = diffx;
+                    closestvectrx = closestang.x;
                     }
-                }
             }
-            angel::_settings->is_aim = false;
+            driver::write_memory(driver, client + client_dll::dwViewAngles, locang + Vector3(0, closestang.x / 70, 0));
         }
+        
+        
+
+
+
     }
+
+
+    
 }
 

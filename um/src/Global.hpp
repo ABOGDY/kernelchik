@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include "Vector.hpp"
 //Screen Globals
 int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -20,3 +21,5 @@ int TeamActiveCombo;
 int EnemyActiveCombo;
 const char* ComboSelections[3] = { "2D Box", "3D Box", "Corners" };
 bool Bhop; 
+//Debug globals
+int closestvectrx;

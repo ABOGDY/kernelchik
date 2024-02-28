@@ -258,6 +258,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				Cheats::espLoop(pid, client, engine);
 				Cheats::Bhoppin(pid, client, engine);
 				Cheats::AntiFlash(pid, client, engine);
+				Cheats::TriggerBot(pid, client, engine);
 				ImGui::Render();
 
 				constexpr float color[4](0.f, 0.f, 0.f, 0.f);
@@ -267,6 +268,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 				swap_chain->Present(0U, 0U);
+				if (GetAsyncKeyState(VK_END)) {
+					return 0;
+				}
 			}
 
 			ImGui_ImplDX11_Shutdown();

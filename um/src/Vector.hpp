@@ -94,6 +94,15 @@ struct Vector3
 		return Vector3{ x * factor, y * factor, z * factor };
 	}
 	// utils
+	float dot(Vector3 a, Vector3 b)  //calculates dot product of a and b
+	{
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
+
+	float mag(Vector3 a)  //calculates magnitude of a
+	{
+		return std::sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+	}
 	float Length()
 	{
 		return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));

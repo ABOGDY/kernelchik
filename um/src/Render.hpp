@@ -1,7 +1,7 @@
 #pragma once
 #include "imgui.h"
 #include "Global.hpp"
-
+#include <string>
 namespace Render
 {
 	void DrawRect(int x, int y, int w, int h, ImColor color, int thickness)
@@ -103,6 +103,14 @@ namespace Menus
 
 				if (ImGui::BeginTabItem("Aimbot"))
 				{
+					if (ImGui::BeginChild(1, ImVec2({ 235,135 }), true, ImGuiWindowFlags_NoScrollbar))
+					{
+						bool b = false;
+
+						ImGui::LogText(closestvectrx);
+
+					}
+					ImGui::EndChild();
 					ImGui::EndTabItem();
 				}
 
