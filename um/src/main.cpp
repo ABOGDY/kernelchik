@@ -75,15 +75,11 @@ LRESULT CALLBACK window_procedure(HWND window, UINT message, WPARAM w_param, LPA
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 	std::cout << "bebra \n";
 
-	const DWORD pid = get_process_id(L"cs2.exe");
-
 	if (pid == 0) {
 		std::cout << "Failed to find cs2 \n";
 		std::cin.get();
 		return 1;
 	}
-
-	const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,nullptr);
 
 	if (driver == INVALID_HANDLE_VALUE) {
 		std::cout << "Failed to create driver handle \n";
@@ -109,7 +105,12 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 
 			RegisterClassExA(&wc);
 			//const HWND Overlay = FindWindowA(NULL, "Counter-Strike 2");
-			const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, 0, 0, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
+			HWND windhndl = FindWindowA(NULL, "Counter-Strike 2");
+			RECT rect;
+			GetWindowRect(windhndl, &rect);
+			//int positionX = rect.left;
+			//int positionY = rect.top;
+			const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, rect.left, rect.top, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
 
 			SetLayeredWindowAttributes(Overlay, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 

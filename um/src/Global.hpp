@@ -101,7 +101,7 @@ const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr,
 const DWORD pid = get_process_id(L"cs2.exe");
 const std::uintptr_t client = get_module_base(pid, L"client.dll");
 const std::uintptr_t engine = get_module_base(pid, L"engine2.dll");
-int screenWidth = drivermem::read_memory<uintptr_t>(driver, engine + engine2_dll::dwWindowHeight);; //GetSystemMetrics(SM_CXSCREEN)
+int screenWidth = drivermem::read_memory<uintptr_t>(driver, engine + engine2_dll::dwWindowWidth);; //GetSystemMetrics(SM_CXSCREEN)
 int screenHeight = drivermem::read_memory<uintptr_t>(driver,engine + engine2_dll::dwWindowHeight);  //GetSystemMetrics(SM_CYSCREEN)
 //Menu Globals
 bool espBoxT;
