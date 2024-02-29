@@ -291,7 +291,7 @@ namespace Cheats
         const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
         const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
         if (space_pressed && in_air) {
-            Sleep(16);
+            //Sleep(16);
             drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
         }
         else if (space_pressed && !in_air) {

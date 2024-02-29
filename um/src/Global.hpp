@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 #include "Vector.hpp"
+#include "offsets/offsets.hpp"
 
 static DWORD get_process_id(const wchar_t* process_name) {
 	DWORD process_id = 0;
