@@ -105,9 +105,8 @@ namespace Menus
 				{
 					if (ImGui::BeginChild(1, ImVec2({ 235,135 }), true, ImGuiWindowFlags_NoScrollbar))
 					{
-						bool b = false;
-
-						//ImGui::LabelText('closestvectrx', "xui");
+						ImGui::Checkbox("Aim Bot", &AimBotbl);
+						ImGui::Checkbox("Trigger Bot", &TriggerBotbl);
 
 					}
 					ImGui::EndChild();
@@ -124,7 +123,7 @@ namespace Menus
 					if (ImGui::BeginChild(1, ImVec2({ 235,135 }), true, ImGuiWindowFlags_NoScrollbar))
 					{
 
-						ImGui::Checkbox("BH", &Bhop);
+						ImGui::Checkbox("BH", &Bhopbl);
 						
 					}
 					ImGui::EndChild();

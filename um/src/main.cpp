@@ -210,6 +210,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				Cheats::Bhoppin();
 				Cheats::AntiFlash();
 				Cheats::AimBot();
+				Cheats::TriggerBot();
 				ImGui::Render();
 				constexpr float color[4](0.f, 0.f, 0.f, 0.f);
 				device_context->OMSetRenderTargets(1U, &render_target_view, nullptr);

@@ -278,7 +278,7 @@ namespace Cheats
     }
 
     void Bhoppin() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
-        if (Bhop == true)
+        if (Bhopbl == true)
         { 
         
         //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -358,6 +358,51 @@ namespace Cheats
             weapon_type_zone_repulsor = 18,
             weapon_type_unknown = 19,
         };
+        enum weaponslist {
+            nothing = 0,
+            deagle = 1,
+            dualberretas = 2,
+            fiveseven = 3,
+            glock = 4,
+            ak47 = 7,
+            aug = 8,
+            awp = 9,
+            famas = 10,
+            g3sg1 = 11,
+            galil = 13,
+            m248 = 14,
+            m4a4 = 16,
+            mac9 = 17,
+            p90 = 19,
+            mp5sd = 23,
+            ump = 24,
+            xm = 25,
+            ppbizon = 26,
+            mag7 = 27,
+            negev = 28,
+            savedoff = 29,
+            tec = 30,
+            zeus = 31,
+            p2000 = 32,
+            mp7 = 33,
+            mp9 = 34,
+            nova = 35,
+            scar = 38,
+            sg553 = 39,
+            ssg09 = 40,
+            ctknife = 42,
+            flashbang = 43,
+            he = 44,
+            smoke = 45,
+            moly = 46,
+            decoy = 47,
+            incgr = 48,
+            bomba = 49,
+            knife = 59,
+            m4a1s = 60,
+            cz75 = 63,
+            revolver = 64,
+        };
         //trigger
         closestvectrx = 0;
         //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -384,11 +429,9 @@ namespace Cheats
         int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
         auto myWeapon = drivermem::read_memory<uintptr_t>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
         //int wepindx = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex); //+ C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item +
-        auto wepindx = drivermem::read_memory<USHORT>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);//+ C_BasePlayerPawn::m_pWeaponServices + CPlayer_WeaponServices::m_hActiveWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
-        char tstline[40];
-        sprintf_s(tstline, "%d", wepindx);
-        Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
-        if (wepindx != 42 && wepindx != 45 && wepindx != 48)
+        auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);//+ C_BasePlayerPawn::m_pWeaponServices + CPlayer_WeaponServices::m_hActiveWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
+        
+        if ((wepindx > 59 || wepindx < 42) && wepindx != 0)
         {
             //drivermem::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x, locang.y + 1, locang.z));
             Vector3 closestang = Vector3(0,0,0);
@@ -451,13 +494,19 @@ namespace Cheats
                 Vector3 playerFeetR = drivermem::read_memory<Vector3>(driver, boneArray + 24 * 32);
 
                 Vector3 diffvec3 = playerHead - plorig ;
-                float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / M_PI);
+                float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / std::numbers::pi_v<float>);
                 //float diffy = std::atan2(diffvec3.x, diffvec3.z) * (180 / M_PI);
                 if (abs(closestang.x) < abs(diffx)) {
                     closestang.x = diffx;
                     closestvectrx = closestang.x;
                     }
+                
             }
+            auto plorig = drivermem::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vRenderOrigin);
+            //double truncatedx = (double)((int)plorig.x * 100) / 100;
+            //char tstline[40];
+            //sprintf_s(tstline, "%d", plorig.x);
+            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
             //drivermem::write_memory(driver, client + client_dll::dwViewAngles, locang + Vector3(0, closestang.x / 70, 0));
         }
         
@@ -467,7 +516,33 @@ namespace Cheats
 
     }
 
-
     
+    void TriggerBot() {
+        
+        if (GetAsyncKeyState(VK_XBUTTON2) && TriggerBotbl == true) {
+            const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+            const auto crosshair_ent = drivermem::read_memory<int>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex);
+            if (crosshair_ent > 0) {
+                const auto entlist = drivermem::read_memory<DWORD64>(driver, client + client_dll::dwEntityList);
+                const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, 0x8 * (crosshair_ent >> 9) + 0x10);
+                const auto entity = drivermem::read_memory<std::uintptr_t>(driver, entEntry + 120 * (crosshair_ent & 0x1FF));
+                const auto Entityteam = drivermem::read_memory<std::uint32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
+                const auto Playerteam = drivermem::read_memory<std::uint32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
+                char tstline[40];
+                sprintf_s(tstline, "%d", Entityteam);
+                Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+                if (Entityteam != Playerteam) {
+                    const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
+                    if (entityHp > 0) {
+                        POINT p;
+                        GetCursorPos(&p);
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        }
+                    }
+                }
+            }
+        
+    }
 }
 
