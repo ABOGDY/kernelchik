@@ -31,6 +31,7 @@ namespace client_dll { // client.dll
     constexpr std::ptrdiff_t dwSensitivity_sensitivity = 0x40;
     constexpr std::ptrdiff_t dwViewMatrix = 0x191CF30;
     constexpr std::ptrdiff_t dwViewRender = 0x191D7B0;
+    constexpr std::ptrdiff_t dwViewAngles = 0x1929730;
 }
 
 namespace engine2_dll { // engine2.dll

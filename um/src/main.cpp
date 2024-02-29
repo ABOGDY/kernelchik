@@ -110,7 +110,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 			GetWindowRect(windhndl, &rect);
 			//int positionX = rect.left;
 			//int positionY = rect.top;
-			const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, rect.left, rect.top, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
+			const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, rect.left+8, rect.bottom - screenHeight-8, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
 
 			SetLayeredWindowAttributes(Overlay, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 
@@ -180,6 +180,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 			ImGui_ImplDX11_Init(device, device_context);
 
 			while (true) {
+				
 				MSG msg;
 				while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
 				{
@@ -208,7 +209,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				Cheats::espLoop();
 				Cheats::Bhoppin();
 				Cheats::AntiFlash();
-				Cheats::TriggerBot();
+				Cheats::AimBot();
 				ImGui::Render();
 				constexpr float color[4](0.f, 0.f, 0.f, 0.f);
 				device_context->OMSetRenderTargets(1U, &render_target_view, nullptr);

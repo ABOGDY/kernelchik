@@ -291,7 +291,7 @@ namespace Cheats
         const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
         const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
         if (space_pressed && in_air) {
-            //Sleep(16);
+            Sleep(16);
             drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
         }
         else if (space_pressed && !in_air) {
@@ -313,7 +313,7 @@ namespace Cheats
         drivermem::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
     }
 
-    void TriggerBot() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
+    void AimBot() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
         enum BONEINDEX : DWORD
         {
             head = 6,
@@ -364,19 +364,33 @@ namespace Cheats
         //const DWORD pid = ProcessId;
         //const std::uintptr_t client = Client;
         //const std::uintptr_t engine = Engine;
-
+        
         uintptr_t LocalPlayerPawn = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        uintptr_t LocalPlayerCont = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerController);
         uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
         view_matrix_t viewMatrix = drivermem::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
-        //Vector3 locang = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
         uint64_t plscene = drivermem::read_memory<uint64_t>(driver, LocalPlayerPawn + C_BaseEntity::m_pGameSceneNode);
+        Vector3 locang = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
+
+        //C_BasePlayerPawn::v_angle
+        //C_CSPlayerPawnBase::m_angEyeAngles
+        //CGlobalLightBase::m_ViewAngles
+        //C_CSPlayerPawn::m_aimPunchAngle
+        //C_CSPlayerPawnBase::m_iShotsFired
+        //CBasePlayerController::m_hPawn
+        //C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex
+        //CCSPlayerController_InventoryServices::m_vecServerAuthoritativeWeaponSlots
         int myHealth = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
         int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
-        int myWeapon = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
-        //driver::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x + 1, locang.y + 1, locang.z + 0));
-        
-        if (myWeapon != cs_weapon_type::weapon_type_knife && myWeapon != cs_weapon_type::weapon_type_grenade && myWeapon != cs_weapon_type::weapon_type_c4)
+        auto myWeapon = drivermem::read_memory<uintptr_t>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
+        //int wepindx = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex); //+ C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item +
+        auto wepindx = drivermem::read_memory<USHORT>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);//+ C_BasePlayerPawn::m_pWeaponServices + CPlayer_WeaponServices::m_hActiveWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
+        char tstline[40];
+        sprintf_s(tstline, "%d", wepindx);
+        Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+        if (wepindx != 42 && wepindx != 45 && wepindx != 48)
         {
+            //drivermem::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x, locang.y + 1, locang.z));
             Vector3 closestang = Vector3(0,0,0);
             for (int i = 1; i < 64; i++)
             {

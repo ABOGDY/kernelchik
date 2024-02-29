@@ -129,7 +129,13 @@ struct Vector3
 			std::atan2(y, x) * (180.0f / std::numbers::pi_v<float>),
 			0.0f };
 	}
-
+	Vector3 CalculateAngle(
+		const Vector3& localPosition,
+		const Vector3& enemyPosition,
+		const Vector3& viewAngles) noexcept
+	{
+		return ((enemyPosition - localPosition).ToAngle() - viewAngles);
+	}
 	const bool IsZero() const noexcept
 	{
 		return x == 0.f && y == 0.f && z == 0.f;
