@@ -1,8 +1,19 @@
 #pragma once
+
 #include <numbers>
 #include <cmath>
 #include "Global.hpp"
 
+struct Color
+{
+	Color(
+		const float r = 0.f,
+		const float g = 0.f,
+		const float b = 0.f,
+		const float a = 0.f) noexcept :
+		r(r), g(g), b(b), a(a) { }
+	float r, g, b, a;
+};
 struct view_matrix_t
 {
 	float* operator[](int index)
@@ -50,9 +61,9 @@ struct Vector2
 	{
 		return x != other.x || y != other.y;
 	}
-	ImVec2 ToImVec2()
+	Vector2 ToImVec2()
 	{
-		return ImVec2(x, y);
+		return Vector2(x, y);
 	}
 	float Length()
 	{

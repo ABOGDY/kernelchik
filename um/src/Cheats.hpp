@@ -6,49 +6,7 @@
 #include "offsets/client.dll.hpp"
 #include "Global.hpp"
 #include <Windows.h>
-#include <TlHelp32.h>
-namespace driver {
-    namespace codes {
-        constexpr ULONG attach = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x696, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
-        constexpr ULONG read = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x697, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
-        constexpr ULONG write = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x698, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
-    }
-    struct Request {
-        HANDLE process_id;
 
-        PVOID target;
-        PVOID buffer;
-
-        SIZE_T size;
-        SIZE_T return_size;
-    };
-
-    bool attach_to_process(HANDLE driver_handle, const DWORD pid) {
-        Request r = {};
-        r.process_id = reinterpret_cast<HANDLE>(pid);
-        return DeviceIoControl(driver_handle, codes::attach, &r, sizeof(r), &r, sizeof(r), nullptr, nullptr);
-    }
-    template <class T>
-    T read_memory(HANDLE driver_handle, const std::uintptr_t addr) {
-        T temp = {};
-        Request r;
-        r.target = reinterpret_cast<PVOID>(addr);
-        r.buffer = &temp;
-        r.size = sizeof(T);
-        DeviceIoControl(driver_handle, codes::read, &r, sizeof(r), &r, sizeof(r), nullptr, nullptr);
-
-        return temp;
-    }
-    template <class T>
-    void write_memory(HANDLE driver_handle, const std::uintptr_t addr, const T& value) {
-        Request r;
-        r.target = reinterpret_cast<PVOID>(addr);
-        r.buffer = (PVOID)&value;
-        r.size = sizeof(T);
-
-        DeviceIoControl(driver_handle, codes::write, &r, sizeof(r), &r, sizeof(r), nullptr, nullptr);
-    }
-}
 struct BoneJointData
 {
     Vector3 Pos;
@@ -63,47 +21,47 @@ struct BoneJointPos
 
 namespace Cheats
 {
-    void espLoop(const int ProcessId, uintptr_t Client, uintptr_t Engine)
+    void espLoop() //const int ProcessId, uintptr_t Client, uintptr_t Engine
     {
-        const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        const DWORD pid = ProcessId;
-        const std::uintptr_t client = Client;
-        const std::uintptr_t engine = Engine;
+        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        //const DWORD pid = ProcessId;
+        //const std::uintptr_t client = Client;
+        // const std::uintptr_t engine = Engine;
 
-        uintptr_t LocalPlayerPawn = driver::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        view_matrix_t viewMatrix = driver::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
+        uintptr_t LocalPlayerPawn = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        view_matrix_t viewMatrix = drivermem::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
 
-        int myHealth = driver::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
-        int myTeam = driver::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
+        int myHealth = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
+        int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
 
-        uintptr_t Entity = driver::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
+        uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
 
         for (int i = 1; i < 64; i++)
         {
-            uintptr_t listEntity = driver::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
+            uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
             if (listEntity == 0)
                 continue;
 
-            uintptr_t entityController = driver::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
+            uintptr_t entityController = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
             if (entityController == 0)
                 continue;
 
-            uintptr_t entityControllerPawn = driver::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
+            uintptr_t entityControllerPawn = drivermem::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
             if (entityControllerPawn == 0)
                 continue;
 
-            listEntity = driver::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
+            listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
             if (listEntity == 0)
                 continue;
 
-            uintptr_t entityPawn = driver::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
+            uintptr_t entityPawn = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
             if (entityPawn == 0)
                 continue;
 
             //Entity Values
-            int playerTeam = driver::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
-            int playerHealth = driver::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
-            int playerArmor = driver::read_memory<int>(driver, entityPawn + C_CSPlayerPawnBase::m_ArmorValue);
+            int playerTeam = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
+            int playerHealth = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
+            int playerArmor = drivermem::read_memory<int>(driver, entityPawn + C_CSPlayerPawnBase::m_ArmorValue);
 
             if (playerHealth <= 1 || playerHealth > 100)
                 continue;
@@ -114,26 +72,26 @@ namespace Cheats
             //Rendering
 
             //Entity Feet
-            Vector3 origin = driver::read_memory<Vector3>(driver, entityPawn + CGameSceneNode::m_vecOrigin);
+            Vector3 origin = drivermem::read_memory<Vector3>(driver, entityPawn + CGameSceneNode::m_vecOrigin);
 
             //Bones Pointer
-            uint64_t gameScene = driver::read_memory<uint64_t>(driver, entityPawn + C_BaseEntity::m_pGameSceneNode);
+            uint64_t gameScene = drivermem::read_memory<uint64_t>(driver, entityPawn + C_BaseEntity::m_pGameSceneNode);
 
             //Bones
-            uint64_t boneArray = driver::read_memory<uint64_t>(driver, gameScene + CSkeletonInstance::m_modelState + 0x80);
-            Vector3 playerHead = driver::read_memory<Vector3>(driver, boneArray + 6 * 32);
-            Vector3 playerNeck = driver::read_memory<Vector3>(driver, boneArray + 5 * 32);
-            Vector3 playerShoulderL = driver::read_memory<Vector3>(driver, boneArray + 13 * 32);
-            Vector3 playerShoulderR = driver::read_memory<Vector3>(driver, boneArray + 8 * 32);
-            Vector3 playerForeL = driver::read_memory<Vector3>(driver, boneArray + 14 * 32);
-            Vector3 playerForeR = driver::read_memory<Vector3>(driver, boneArray + 9 * 32);
-            Vector3 playerHandL = driver::read_memory<Vector3>(driver, boneArray + 16 * 32);
-            Vector3 playerHandR = driver::read_memory<Vector3>(driver, boneArray + 11 * 32);
-            Vector3 playerWaist = driver::read_memory<Vector3>(driver, boneArray + 0 * 32);
-            Vector3 playerKneeL = driver::read_memory<Vector3>(driver, boneArray + 26 * 32);
-            Vector3 playerKneeR = driver::read_memory<Vector3>(driver, boneArray + 23 * 32);
-            Vector3 playerFeetL = driver::read_memory<Vector3>(driver, boneArray + 27 * 32);
-            Vector3 playerFeetR = driver::read_memory<Vector3>(driver, boneArray + 24 * 32);
+            uint64_t boneArray = drivermem::read_memory<uint64_t>(driver, gameScene + CSkeletonInstance::m_modelState + 0x80);
+            Vector3 playerHead = drivermem::read_memory<Vector3>(driver, boneArray + 6 * 32);
+            Vector3 playerNeck = drivermem::read_memory<Vector3>(driver, boneArray + 5 * 32);
+            Vector3 playerShoulderL = drivermem::read_memory<Vector3>(driver, boneArray + 13 * 32);
+            Vector3 playerShoulderR = drivermem::read_memory<Vector3>(driver, boneArray + 8 * 32);
+            Vector3 playerForeL = drivermem::read_memory<Vector3>(driver, boneArray + 14 * 32);
+            Vector3 playerForeR = drivermem::read_memory<Vector3>(driver, boneArray + 9 * 32);
+            Vector3 playerHandL = drivermem::read_memory<Vector3>(driver, boneArray + 16 * 32);
+            Vector3 playerHandR = drivermem::read_memory<Vector3>(driver, boneArray + 11 * 32);
+            Vector3 playerWaist = drivermem::read_memory<Vector3>(driver, boneArray + 0 * 32);
+            Vector3 playerKneeL = drivermem::read_memory<Vector3>(driver, boneArray + 26 * 32);
+            Vector3 playerKneeR = drivermem::read_memory<Vector3>(driver, boneArray + 23 * 32);
+            Vector3 playerFeetL = drivermem::read_memory<Vector3>(driver, boneArray + 27 * 32);
+            Vector3 playerFeetR = drivermem::read_memory<Vector3>(driver, boneArray + 24 * 32);
 
 
             //ScreenHead
@@ -296,12 +254,12 @@ namespace Cheats
     
 }
     //¿¬¿œ€¬œ€
-    void fovJChanger(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
-        const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        const DWORD pid = ProcessId;
-        const std::uintptr_t client = Client;
-        const std::uintptr_t engine = Engine;
-        const auto local_player_cont = driver::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerController);
+    void fovJChanger() {
+        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        //const DWORD pid = ProcessId;
+        //const std::uintptr_t client = Client;
+        //const std::uintptr_t engine = Engine;
+        const auto local_player_cont = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerController);
         static int fovchik;
         static bool bToggled = false;
         if (GetAsyncKeyState('J') && !bToggled) {
@@ -316,46 +274,46 @@ namespace Cheats
         else if (!GetAsyncKeyState('J')) {
             bToggled = false;
         }
-        driver::write_memory(driver, local_player_cont + CBasePlayerController::m_iDesiredFOV, fovchik);
+        drivermem::write_memory(driver, local_player_cont + CBasePlayerController::m_iDesiredFOV, fovchik);
     }
 
-    void Bhoppin(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
+    void Bhoppin() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
         if (Bhop == true)
         { 
         
-        const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        const DWORD pid = ProcessId;
-        const std::uintptr_t client = Client;
-        const std::uintptr_t engine = Engine;
-        const auto local_player_pawn = driver::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        const auto flags = driver::read_memory<std::uint32_t>(driver, local_player_pawn + C_BaseEntity::m_fFlags);
+        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        //const DWORD pid = ProcessId;
+        //const std::uintptr_t client = Client;
+        //const std::uintptr_t engine = Engine;
+        const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        const auto flags = drivermem::read_memory<std::uint32_t>(driver, local_player_pawn + C_BaseEntity::m_fFlags);
         const bool in_air = flags & (1 << 0);
         const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
-        const auto force_jump = driver::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
+        const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
         if (space_pressed && in_air) {
             Sleep(16);
-            driver::write_memory(driver, client + client_dll::dwForceJump, 65537);
+            drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
         }
         else if (space_pressed && !in_air) {
-            driver::write_memory(driver, client + client_dll::dwForceJump, 256);
+            drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
 
         }
         else if (!space_pressed && force_jump == 65537) {
-            driver::write_memory(driver, client + client_dll::dwForceJump, 256);
+            drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
         }
     }
     }
 
-    void AntiFlash(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
-        const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        const DWORD pid = ProcessId;
-        const std::uintptr_t client = Client;
-        const std::uintptr_t engine = Engine;
-        const auto local_player_pawn = driver::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        driver::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
+    void AntiFlash() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
+        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        //const DWORD pid = ProcessId;
+        //const std::uintptr_t client = Client;
+        //const std::uintptr_t engine = Engine;
+        const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        drivermem::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
     }
 
-    void TriggerBot(const int ProcessId, uintptr_t Client, uintptr_t Engine) {
+    void TriggerBot() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
         enum BONEINDEX : DWORD
         {
             head = 6,
@@ -402,19 +360,19 @@ namespace Cheats
         };
         //trigger
         closestvectrx = 0;
-        const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        const DWORD pid = ProcessId;
-        const std::uintptr_t client = Client;
-        const std::uintptr_t engine = Engine;
+        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        //const DWORD pid = ProcessId;
+        //const std::uintptr_t client = Client;
+        //const std::uintptr_t engine = Engine;
 
-        uintptr_t LocalPlayerPawn = driver::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        uintptr_t Entity = driver::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
-        view_matrix_t viewMatrix = driver::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
-        Vector3 locang = driver::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
-        uint64_t plscene = driver::read_memory<uint64_t>(driver, LocalPlayerPawn + C_BaseEntity::m_pGameSceneNode);
-        int myHealth = driver::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
-        int myTeam = driver::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
-        int myWeapon = driver::read_memory<int>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
+        uintptr_t LocalPlayerPawn = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
+        view_matrix_t viewMatrix = drivermem::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
+        //Vector3 locang = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
+        uint64_t plscene = drivermem::read_memory<uint64_t>(driver, LocalPlayerPawn + C_BaseEntity::m_pGameSceneNode);
+        int myHealth = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
+        int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
+        int myWeapon = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
         //driver::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x + 1, locang.y + 1, locang.z + 0));
         
         if (myWeapon != cs_weapon_type::weapon_type_knife && myWeapon != cs_weapon_type::weapon_type_grenade && myWeapon != cs_weapon_type::weapon_type_c4)
@@ -422,30 +380,30 @@ namespace Cheats
             Vector3 closestang = Vector3(0,0,0);
             for (int i = 1; i < 64; i++)
             {
-                uintptr_t listEntity = driver::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
+                uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
                 if (listEntity == 0)
                     continue;
 
-                uintptr_t entityController = driver::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
+                uintptr_t entityController = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
                 if (entityController == 0)
                     continue;
 
-                uintptr_t entityControllerPawn = driver::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
+                uintptr_t entityControllerPawn = drivermem::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
                 if (entityControllerPawn == 0)
                     continue;
 
-                listEntity = driver::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
+                listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
                 if (listEntity == 0)
                     continue;
 
-                uintptr_t entityPawn = driver::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
+                uintptr_t entityPawn = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
                 if (entityPawn == 0)
                     continue;
 
                 //Entity Values
-                int playerTeam = driver::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
-                int playerHealth = driver::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
-                int playerArmor = driver::read_memory<int>(driver, entityPawn + C_CSPlayerPawnBase::m_ArmorValue);
+                int playerTeam = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
+                int playerHealth = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
+                int playerArmor = drivermem::read_memory<int>(driver, entityPawn + C_CSPlayerPawnBase::m_ArmorValue);
 
                 if (playerHealth <= 1 || playerHealth > 100)
                     continue;
@@ -457,26 +415,26 @@ namespace Cheats
 
 
                 //Bones Pointer
-                uint64_t gameScene = driver::read_memory<uint64_t>(driver, entityPawn + C_BaseEntity::m_pGameSceneNode);
+                uint64_t gameScene = drivermem::read_memory<uint64_t>(driver, entityPawn + C_BaseEntity::m_pGameSceneNode);
 
                 //Entity Feet
-                Vector3 origin = driver::read_memory<Vector3>(driver, gameScene + CGameSceneNode::m_vecOrigin);
-                Vector3 plorig = driver::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vecOrigin);
+                Vector3 origin = drivermem::read_memory<Vector3>(driver, gameScene + CGameSceneNode::m_vecOrigin);
+                Vector3 plorig = drivermem::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vecOrigin);
                 //Bones
-                uint64_t boneArray = driver::read_memory<uint64_t>(driver, gameScene + CSkeletonInstance::m_modelState + 0x80);
-                Vector3 playerHead = driver::read_memory<Vector3>(driver, boneArray + 6 * 32);
-                Vector3 playerNeck = driver::read_memory<Vector3>(driver, boneArray + 5 * 32);
-                Vector3 playerShoulderL = driver::read_memory<Vector3>(driver, boneArray + 13 * 32);
-                Vector3 playerShoulderR = driver::read_memory<Vector3>(driver, boneArray + 8 * 32);
-                Vector3 playerForeL = driver::read_memory<Vector3>(driver, boneArray + 14 * 32);
-                Vector3 playerForeR = driver::read_memory<Vector3>(driver, boneArray + 9 * 32);
-                Vector3 playerHandL = driver::read_memory<Vector3>(driver, boneArray + 16 * 32);
-                Vector3 playerHandR = driver::read_memory<Vector3>(driver, boneArray + 11 * 32);
-                Vector3 playerWaist = driver::read_memory<Vector3>(driver, boneArray + 0 * 32);
-                Vector3 playerKneeL = driver::read_memory<Vector3>(driver, boneArray + 26 * 32);
-                Vector3 playerKneeR = driver::read_memory<Vector3>(driver, boneArray + 23 * 32);
-                Vector3 playerFeetL = driver::read_memory<Vector3>(driver, boneArray + 27 * 32);
-                Vector3 playerFeetR = driver::read_memory<Vector3>(driver, boneArray + 24 * 32);
+                uint64_t boneArray = drivermem::read_memory<uint64_t>(driver, gameScene + CSkeletonInstance::m_modelState + 0x80);
+                Vector3 playerHead = drivermem::read_memory<Vector3>(driver, boneArray + 6 * 32);
+                Vector3 playerNeck = drivermem::read_memory<Vector3>(driver, boneArray + 5 * 32);
+                Vector3 playerShoulderL = drivermem::read_memory<Vector3>(driver, boneArray + 13 * 32);
+                Vector3 playerShoulderR = drivermem::read_memory<Vector3>(driver, boneArray + 8 * 32);
+                Vector3 playerForeL = drivermem::read_memory<Vector3>(driver, boneArray + 14 * 32);
+                Vector3 playerForeR = drivermem::read_memory<Vector3>(driver, boneArray + 9 * 32);
+                Vector3 playerHandL = drivermem::read_memory<Vector3>(driver, boneArray + 16 * 32);
+                Vector3 playerHandR = drivermem::read_memory<Vector3>(driver, boneArray + 11 * 32);
+                Vector3 playerWaist = drivermem::read_memory<Vector3>(driver, boneArray + 0 * 32);
+                Vector3 playerKneeL = drivermem::read_memory<Vector3>(driver, boneArray + 26 * 32);
+                Vector3 playerKneeR = drivermem::read_memory<Vector3>(driver, boneArray + 23 * 32);
+                Vector3 playerFeetL = drivermem::read_memory<Vector3>(driver, boneArray + 27 * 32);
+                Vector3 playerFeetR = drivermem::read_memory<Vector3>(driver, boneArray + 24 * 32);
 
                 Vector3 diffvec3 = playerHead - plorig ;
                 float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / M_PI);
@@ -486,7 +444,7 @@ namespace Cheats
                     closestvectrx = closestang.x;
                     }
             }
-            driver::write_memory(driver, client + client_dll::dwViewAngles, locang + Vector3(0, closestang.x / 70, 0));
+            //drivermem::write_memory(driver, client + client_dll::dwViewAngles, locang + Vector3(0, closestang.x / 70, 0));
         }
         
         
