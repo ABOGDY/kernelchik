@@ -18,43 +18,7 @@ struct BoneJointPos
     Vector2 ScreenPos;
     bool IsVisible = false;
 };
-void EntityLoop()
-{
-    for (int i = 0; i < 64; i++)
-    {
-        uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
 
-        uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
-        if (listEntity == 0)
-            continue;
-
-        uintptr_t entityController = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
-        if (entityController == 0)
-            continue;
-
-        uintptr_t entityControllerPawn = drivermem::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
-        if (entityControllerPawn == 0)
-            continue;
-
-        listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
-        if (listEntity == 0)
-            continue;
-
-        uintptr_t entityPawn = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
-        if (entityPawn == 0)
-            continue;
-
-        auto playerTeam = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
-        auto playerHealth = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
-
-        uintptr_t entityNameAddress = drivermem::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_sSanitizedPlayerName);
-
-        auto entityName = drivermem::read_memory<char>(driver, entityNameAddress);
-        char tstline[40];
-        sprintf_s(tstline, "%d", listEntity);
-        Render::DrawTextz(200, 10 + (i*8), ImColor(1.f, 0.f, 0.f, 1.f), tstline);
-    }
-}
 namespace Cheats
 {
     void espLoop() //const int ProcessId, uintptr_t Client, uintptr_t Engine
@@ -317,27 +281,36 @@ namespace Cheats
         if (Bhopbl == true)
         { 
         
-        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        //const DWORD pid = ProcessId;
-        //const std::uintptr_t client = Client;
-        //const std::uintptr_t engine = Engine;
-        const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        const auto flags = drivermem::read_memory<std::uint32_t>(driver, local_player_pawn + C_BaseEntity::m_fFlags);
-        const bool in_air = flags & (1 << 0);
-        const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
-        const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
-        if (space_pressed && in_air) {
-            Sleep(16);
-            drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
+            //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+            //const DWORD pid = ProcessId;
+            //const std::uintptr_t client = Client;
+            //const std::uintptr_t engine = Engine;
+            const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+            const auto flags = drivermem::read_memory<std::uint32_t>(driver, local_player_pawn + C_BaseEntity::m_fFlags);
+            const bool in_air = flags & (1 << 0);
+            const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
+            const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
+            if (space_pressed && in_air) {
+                Sleep(16);
+                drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
+            }
+            else if (space_pressed && !in_air) {
+                drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+            }
+            else if (!space_pressed && force_jump == 65537) {
+                drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+            }
+            //if (space_pressed && in_air) {
+            //    keybd_event(VK_SPACE, 0, 0, 0);
+            //}
+            //else if (space_pressed && !in_air) {
+            //    keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
+            //}
+            //else if (!space_pressed) {
+            //    keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
+            //}
+            
         }
-        else if (space_pressed && !in_air) {
-            drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-
-        }
-        else if (!space_pressed && force_jump == 65537) {
-            drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-        }
-    }
     }
 
     void AntiFlash() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
@@ -453,18 +426,9 @@ namespace Cheats
         uint64_t plscene = drivermem::read_memory<uint64_t>(driver, LocalPlayerPawn + C_BaseEntity::m_pGameSceneNode);
         Vector3 locang = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
 
-        //C_BasePlayerPawn::v_angle
-        //C_CSPlayerPawnBase::m_angEyeAngles
-        //CGlobalLightBase::m_ViewAngles
-        //C_CSPlayerPawn::m_aimPunchAngle
-        //C_CSPlayerPawnBase::m_iShotsFired
-        //CBasePlayerController::m_hPawn
-        //C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex
-        //CCSPlayerController_InventoryServices::m_vecServerAuthoritativeWeaponSlots
         int myHealth = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
         int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
         auto myWeapon = drivermem::read_memory<uintptr_t>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
-        //int wepindx = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex); //+ C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item +
         auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);//+ C_BasePlayerPawn::m_pWeaponServices + CPlayer_WeaponServices::m_hActiveWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
         
         if ((wepindx > 59 || wepindx < 42) && wepindx != 0)
@@ -556,10 +520,9 @@ namespace Cheats
         if (GetAsyncKeyState(VK_XBUTTON2) && TriggerBotbl == true) {
             const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
             const auto crosshair_ent = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex); //C_CSPlayerPawnBase::m_iIDEntIndex
-            
             if (crosshair_ent > 0) {
                 const auto entlist = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwEntityList);
-                const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, (0x8 * ((crosshair_ent & 0x7FFF) >> 9)) + 0x10);
+                const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, entlist + 0x8 * (crosshair_ent >> 9) + 0x10);
                 const auto entity = drivermem::read_memory<std::uintptr_t>(driver, entEntry + (0x78 * (crosshair_ent & 0x1FF)));
                 const auto Entityteam = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
                 const auto Playerteam = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
