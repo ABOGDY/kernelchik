@@ -56,9 +56,9 @@ static std::uintptr_t get_module_base(const DWORD pid, const wchar_t* module_nam
 
 namespace drivermem {
     namespace codes {
-        constexpr ULONG attach = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x446, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
-        constexpr ULONG read = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x447, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
-        constexpr ULONG write = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x448, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);//69
+        constexpr ULONG attach = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x696, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
+        constexpr ULONG read = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x697, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);
+        constexpr ULONG write = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x698, METHOD_BUFFERED, FILE_SPECIAL_ACCESS);//69
     }
     struct Request {
         HANDLE process_id;
