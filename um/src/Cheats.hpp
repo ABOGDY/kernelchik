@@ -190,7 +190,7 @@ namespace Cheats
                 Render::DrawHeadCircle(boneHead.x, boneHead.y, width / 7.f, ImColor(1.f, 1.f, 1.f), 1.5f);
             else if (playerTeam != myTeam && espHeadE == true)
                 Render::DrawHeadCircle(boneHead.x, boneHead.y, width / 7.f, ImColor(1.f, 1.f, 1.f), 1.5f);
-            
+
             //float Yaw = atan2f(OppPos.y, OppPos.x) * 57.295779513 - Local.Pawn.ViewAngle.y;
             //float Pitch = -atan(OppPos.z / Distance) * 57.295779513 - Local.Pawn.ViewAngle.x;
             //Esp Skelton
@@ -230,7 +230,7 @@ namespace Cheats
                 Render::DrawLine(boneKneeL.x, boneKneeL.y, boneFeetL.x, boneFeetL.y, ImColor(1.f, 1.f, 1.f), 1.5f);
                 Render::DrawLine(boneKneeR.x, boneKneeR.y, boneFeetR.x, boneFeetR.y, ImColor(1.f, 1.f, 1.f), 1.5f);
             }
-            
+
             //Health Bar If(s)
             if (playerTeam == myTeam && espHealthBarT == true)
             {
@@ -261,9 +261,9 @@ namespace Cheats
                     Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), height / 60, ImColor(1.f, 0.f, 0.f));
             }
             oldangl = nangle;
-}
-    
-}
+        }
+
+    }
     //¿¬¿œ€¬œ€
     void fovJChanger() {
         //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -290,8 +290,8 @@ namespace Cheats
 
     void Bhoppin() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
         if (Bhopbl == true)
-        { 
-        
+        {
+
             //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
             //const DWORD pid = ProcessId;
             //const std::uintptr_t client = Client;
@@ -320,7 +320,7 @@ namespace Cheats
             //else if (!space_pressed) {
             //    keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
             //}
-            
+
         }
     }
 
@@ -429,7 +429,7 @@ namespace Cheats
         //const DWORD pid = ProcessId;
         //const std::uintptr_t client = Client;
         //const std::uintptr_t engine = Engine;
-        
+
         uintptr_t LocalPlayerPawn = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
         uintptr_t LocalPlayerCont = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerController);
         uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
@@ -448,7 +448,7 @@ namespace Cheats
         if ((wepindx > 59 || wepindx < 42) && wepindx != 0)
         {
             //drivermem::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x, locang.y + 1, locang.z));
-            Vector3 closestang = Vector3(0,0,0);
+            Vector3 closestang = Vector3(0, 0, 0);
             for (int i = 1; i < 64; i++)
             {
                 uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * (i & 0x7FFF) >> 9) + 0x10);
@@ -512,7 +512,7 @@ namespace Cheats
                     Vector3 diffvec3 = playerHead - plorig;
                     Vector2 eyesangle = Vector2(locang.y, locang.x);
                     float diffx = eyesangle.x;
-                    
+
                 }
                 //float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / std::numbers::pi_v<float>);
                 //float diffy = std::atan2(diffvec3.x, diffvec3.z) * (180 / M_PI);
@@ -520,12 +520,12 @@ namespace Cheats
                 //    closestang.x = diffx;
                 //    closestvectrx = closestang.x;
                 //   }
-                
+
             }
-            
+
             //auto plorig = drivermem::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vRenderOrigin);
             //double truncatedx = (double)((int)plorig.x * 100) / 100;
-            
+
             //drivermem::write_memory(driver, client + client_dll::dwViewAngles, locang + Vector3(0, closestang.x / 70, 0));
         }
         outputx = locang.x;
@@ -559,7 +559,7 @@ namespace Cheats
                 //char tstline[40];
                 //sprintf_s(tstline, "%d", Entityteam);
                 //Render::DrawTextz(100, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
-                
+
                 if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
                 {
                     POINT p;
@@ -571,13 +571,13 @@ namespace Cheats
                 else if (Entityteam == Playerteam || Entityteam > 3) {
                     tmr = -4;
                 }
-                
+
             }
             if (tmr > 0) {
                 tmr -= 1;
             }
         }
-        
+
     }
 }
 
