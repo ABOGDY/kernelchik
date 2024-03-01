@@ -117,7 +117,9 @@ namespace Cheats
             //Define
             float height = abs(screenPos.y - screenHead.y);
             float width = height / 2.4f;
-
+            static Vector3 oldangl;
+            Vector3 nangle = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
+            Vector3 diffangl = nangle - oldangl;
             //Esp boxes
 
             //2d
@@ -188,8 +190,16 @@ namespace Cheats
                 Render::DrawHeadCircle(boneHead.x, boneHead.y, width / 7.f, ImColor(1.f, 1.f, 1.f), 1.5f);
             else if (playerTeam != myTeam && espHeadE == true)
                 Render::DrawHeadCircle(boneHead.x, boneHead.y, width / 7.f, ImColor(1.f, 1.f, 1.f), 1.5f);
-
+            
+            //float Yaw = atan2f(OppPos.y, OppPos.x) * 57.295779513 - Local.Pawn.ViewAngle.y;
+            //float Pitch = -atan(OppPos.z / Distance) * 57.295779513 - Local.Pawn.ViewAngle.x;
             //Esp Skelton
+            char tstline1[40];
+            char tstline2[40];
+            sprintf_s(tstline1, "%d", diffangl.y);
+            sprintf_s(tstline2, "%d", diffangl.x);
+            Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+            Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
             if (playerTeam == myTeam && espSkeltonT == true)
             {
                 Render::DrawLine(boneNeck.x, boneNeck.y, boneHead.x, boneHead.y, ImColor(1.f, 1.f, 1.f), 1.5f);
@@ -220,7 +230,7 @@ namespace Cheats
                 Render::DrawLine(boneKneeL.x, boneKneeL.y, boneFeetL.x, boneFeetL.y, ImColor(1.f, 1.f, 1.f), 1.5f);
                 Render::DrawLine(boneKneeR.x, boneKneeR.y, boneFeetR.x, boneFeetR.y, ImColor(1.f, 1.f, 1.f), 1.5f);
             }
-
+            
             //Health Bar If(s)
             if (playerTeam == myTeam && espHealthBarT == true)
             {
@@ -250,7 +260,8 @@ namespace Cheats
                 if (playerHealth <= 25 && playerHealth >= 1)
                     Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), height / 60, ImColor(1.f, 0.f, 0.f));
             }
-        }
+            oldangl = nangle;
+}
     
 }
     //¿¬¿œ€¬œ€
@@ -430,14 +441,17 @@ namespace Cheats
         int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
         auto myWeapon = drivermem::read_memory<uintptr_t>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
         auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);//+ C_BasePlayerPawn::m_pWeaponServices + CPlayer_WeaponServices::m_hActiveWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
-        
+        float outputx = 0;
+        float outputy = 0;
+        float outputz = 0;
+
         if ((wepindx > 59 || wepindx < 42) && wepindx != 0)
         {
             //drivermem::write_memory(driver, client + client_dll::dwViewAngles, Vector3(locang.x, locang.y + 1, locang.z));
             Vector3 closestang = Vector3(0,0,0);
             for (int i = 1; i < 64; i++)
             {
-                uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
+                uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * (i & 0x7FFF) >> 9) + 0x10);
                 if (listEntity == 0)
                     continue;
 
@@ -449,7 +463,7 @@ namespace Cheats
                 if (entityControllerPawn == 0)
                     continue;
 
-                listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
+                listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 0x10));
                 if (listEntity == 0)
                     continue;
 
@@ -493,24 +507,38 @@ namespace Cheats
                 Vector3 playerFeetL = drivermem::read_memory<Vector3>(driver, boneArray + 27 * 32);
                 Vector3 playerFeetR = drivermem::read_memory<Vector3>(driver, boneArray + 24 * 32);
 
-                Vector3 diffvec3 = playerHead - plorig ;
-                float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / std::numbers::pi_v<float>);
+                if (playerTeam != myTeam) {
+                    Vector3 boneHead = playerHead.WorldtoScreen(viewMatrix);
+                    Vector3 diffvec3 = playerHead - plorig;
+                    Vector2 eyesangle = Vector2(locang.y, locang.x);
+                    float diffx = eyesangle.x;
+                    
+                }
+                //float diffx = std::atan2(diffvec3.x, diffvec3.y)* (180 / std::numbers::pi_v<float>);
                 //float diffy = std::atan2(diffvec3.x, diffvec3.z) * (180 / M_PI);
-                if (abs(closestang.x) < abs(diffx)) {
-                    closestang.x = diffx;
-                    closestvectrx = closestang.x;
-                    }
+                //if (abs(closestang.x) < abs(diffx)) {
+                //    closestang.x = diffx;
+                //    closestvectrx = closestang.x;
+                //   }
                 
             }
-            auto plorig = drivermem::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vRenderOrigin);
+            
+            //auto plorig = drivermem::read_memory<Vector3>(driver, plscene + CGameSceneNode::m_vRenderOrigin);
             //double truncatedx = (double)((int)plorig.x * 100) / 100;
-            //char tstline[40];
-            //sprintf_s(tstline, "%d", plorig.x);
-            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+            
             //drivermem::write_memory(driver, client + client_dll::dwViewAngles, locang + Vector3(0, closestang.x / 70, 0));
         }
-        
-        
+        outputx = locang.x;
+        outputy = locang.y;
+        char tstline1[40];
+        char tstline2[40];
+        char tstline3[40];
+        sprintf_s(tstline1, "%d", outputx);
+        sprintf_s(tstline2, "%d", outputy);
+        sprintf_s(tstline3, "%d", outputz);
+        Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+        Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+        Render::DrawTextz(200, 160, ImColor(1.f, 0.f, 0.f, 1.f), tstline3);
 
 
 
@@ -518,6 +546,7 @@ namespace Cheats
 
     void TriggerBot() {
         if (GetAsyncKeyState(VK_XBUTTON2) && TriggerBotbl == true) {
+            static int tmr = -4;
             const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
             const auto crosshair_ent = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex); //C_CSPlayerPawnBase::m_iIDEntIndex
             if (crosshair_ent > 0) {
@@ -527,19 +556,25 @@ namespace Cheats
                 const auto Entityteam = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
                 const auto Playerteam = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
                 const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
-                char tstline[40];
-                sprintf_s(tstline, "%d", Entityteam);
-                Render::DrawTextz(100, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
-                if (entityHp > 0 && Entityteam != Playerteam)
+                //char tstline[40];
+                //sprintf_s(tstline, "%d", Entityteam);
+                //Render::DrawTextz(100, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+                
+                if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
                 {
                     POINT p;
                     GetCursorPos(&p);
                     mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                    Sleep(4);
                     mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                    Sleep(20);
+                    tmr = 140;
+                }
+                else if (Entityteam == Playerteam || Entityteam > 3) {
+                    tmr = -4;
                 }
                 
+            }
+            if (tmr > 0) {
+                tmr -= 1;
             }
         }
         

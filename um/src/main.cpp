@@ -209,7 +209,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				Cheats::espLoop();
 				Cheats::Bhoppin();
 				Cheats::AntiFlash();
-				Cheats::AimBot();
+				//Cheats::AimBot();
 				Cheats::TriggerBot();
 				ImGui::Render();
 
