@@ -363,7 +363,7 @@ namespace Cheats
         const std::uintptr_t client = Client;
         const std::uintptr_t engine = Engine;
         const auto local_player_pawn = driver::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        const auto EntityId = driver::read_memory<std::uintptr_t>(driver, local_player_pawn  
+        const auto EntityId = driver::read_memory<std::uintptr_t>(driver, local_player_pawn)  
 
 
 
