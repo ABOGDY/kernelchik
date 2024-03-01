@@ -18,7 +18,43 @@ struct BoneJointPos
     Vector2 ScreenPos;
     bool IsVisible = false;
 };
+void EntityLoop()
+{
+    for (int i = 0; i < 64; i++)
+    {
+        uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
 
+        uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
+        if (listEntity == 0)
+            continue;
+
+        uintptr_t entityController = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (i & 0x1FF));
+        if (entityController == 0)
+            continue;
+
+        uintptr_t entityControllerPawn = drivermem::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_hPlayerPawn);
+        if (entityControllerPawn == 0)
+            continue;
+
+        listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
+        if (listEntity == 0)
+            continue;
+
+        uintptr_t entityPawn = drivermem::read_memory<uintptr_t>(driver, listEntity + (120) * (entityControllerPawn & 0x1FF));
+        if (entityPawn == 0)
+            continue;
+
+        auto playerTeam = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
+        auto playerHealth = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
+
+        uintptr_t entityNameAddress = drivermem::read_memory<uintptr_t>(driver, entityController + CCSPlayerController::m_sSanitizedPlayerName);
+
+        auto entityName = drivermem::read_memory<char>(driver, entityNameAddress);
+        char tstline[40];
+        sprintf_s(tstline, "%d", listEntity);
+        Render::DrawTextz(200, 10 + (i*8), ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+    }
+}
 namespace Cheats
 {
     void espLoop() //const int ProcessId, uintptr_t Client, uintptr_t Engine
@@ -516,32 +552,33 @@ namespace Cheats
 
     }
 
-    
     void TriggerBot() {
-        
         if (GetAsyncKeyState(VK_XBUTTON2) && TriggerBotbl == true) {
             const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-            const auto crosshair_ent = drivermem::read_memory<int>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex);
+            const auto crosshair_ent = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex); //C_CSPlayerPawnBase::m_iIDEntIndex
+            
             if (crosshair_ent > 0) {
-                const auto entlist = drivermem::read_memory<DWORD64>(driver, client + client_dll::dwEntityList);
-                const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, 0x8 * (crosshair_ent >> 9) + 0x10);
-                const auto entity = drivermem::read_memory<std::uintptr_t>(driver, entEntry + 120 * (crosshair_ent & 0x1FF));
-                const auto Entityteam = drivermem::read_memory<std::uint32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
-                const auto Playerteam = drivermem::read_memory<std::uint32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
+                const auto entlist = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwEntityList);
+                const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, (0x8 * ((crosshair_ent & 0x7FFF) >> 9)) + 0x10);
+                const auto entity = drivermem::read_memory<std::uintptr_t>(driver, entEntry + (0x78 * (crosshair_ent & 0x1FF)));
+                const auto Entityteam = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
+                const auto Playerteam = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
+                const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
                 char tstline[40];
                 sprintf_s(tstline, "%d", Entityteam);
-                Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
-                if (Entityteam != Playerteam) {
-                    const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
-                    if (entityHp > 0) {
-                        POINT p;
-                        GetCursorPos(&p);
-                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        }
-                    }
+                Render::DrawTextz(100, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+                if (entityHp > 0 && Entityteam != Playerteam)
+                {
+                    POINT p;
+                    GetCursorPos(&p);
+                    mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                    Sleep(4);
+                    mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                    Sleep(20);
                 }
+                
             }
+        }
         
     }
 }
