@@ -1,12 +1,12 @@
 #pragma once
 #include "Vector.hpp"
-#include <chrono>
 #include "Render.hpp"
 #include "offsets/offsets.hpp"
 #include "offsets/client.dll.hpp"
 #include "../ImGui/imgui.h"
 #include "Global.hpp"
 #include <Windows.h>
+#include <stdio.h>
 
 struct BoneJointData
 {
@@ -134,7 +134,7 @@ namespace Cheats
                 Render::DrawRect(screenPos.x - width / 2, screenHead.y, width, height, ImColor(TeamFrameColor[0], TeamFrameColor[1], TeamFrameColor[2]), 1.5);
             else if (playerTeam != myTeam && espBoxE == true && EnemyActiveCombo == 0)
                 Render::DrawRect(screenPos.x - width / 2, screenHead.y, width, height, ImColor(EnemyFrameColor[0], EnemyFrameColor[1], EnemyFrameColor[2]), 1.5);
-
+           
             //3d
 
 
@@ -661,39 +661,6 @@ namespace Cheats
     }
         
     
-
-    void RadarHackneg() {
-
-        ImGui::SetNextWindowBgAlpha(radar_bg_alpha);
-        //ImGui::Begin(X("Radar"), 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-        ImGui::SetWindowSize({radar_range * 2,radar_range * 2 });
-
-        if (!custom_radar)
-        {
-            ImGui::SetWindowPos(ImVec2(0, 0));
-            show_radar_crossline = false;
-            proportion = 3300.f;
-            radar_point_size_proportion = 1.f;
-            radar_range = 150.f;
-            radar_bg_alpha = 0.1f;
-        }
-
-        // Radar.SetPos({ Gui.Window.Size.x / 2,Gui.Window.Size.y / 2 });
-        Base_Radar::DrawList = ImGui::GetWindowDrawList();
-        Base_Radar::Pos = ImVec2(ImGui::GetWindowPos().x + radar_range, ImGui::GetWindowPos().y + radar_range);
-        Base_Radar::Proportion = proportion;
-        //Base_Radar::Range = radar_range;
-        //Base_Radar::Size = radar_range * 2;
-        Base_Radar::CrossColor = radar_crossline_color;
-
-        Base_Radar::ArcArrowSize *= radar_point_size_proportion;
-        Base_Radar::ArrowSize *= radar_point_size_proportion;
-        Base_Radar::CircleSize *= radar_point_size_proportion;
-
-        Base_Radar::ShowCrossLine = radar_crossline_color;
-        Base_Radar::Opened = true;
-
-    }
 
 }
 

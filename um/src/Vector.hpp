@@ -1,7 +1,8 @@
 #pragma once
-
+#define _USE_MATH_DEFINES
 #include <numbers>
 #include <cmath>
+#include <math.h>
 #include "Global.hpp"
 
 struct Color
@@ -23,17 +24,7 @@ struct view_matrix_t
 
 	float matrix[4][4];
 };
-namespace VecMath {
-	Vector2 RevolveCoordinatesSystem(float RevolveAngle, Vector2 OriginPos, Vector2 DestPos)
-	{
-		Vector2 ResultPos;
-		if (RevolveAngle == 0)
-			return DestPos;
-		ResultPos.x = OriginPos.x + (DestPos.x - OriginPos.x) * cos(RevolveAngle * M_PI / 180) + (DestPos.y - OriginPos.y) * sin(RevolveAngle * M_PI / 180);
-		ResultPos.y = OriginPos.y - (DestPos.x - OriginPos.x) * sin(RevolveAngle * M_PI / 180) + (DestPos.y - OriginPos.y) * cos(RevolveAngle * M_PI / 180);
-		return ResultPos;
-	}
-}
+
 struct Vector2
 {
 	Vector2(
@@ -136,9 +127,10 @@ struct Vector3
 	}
 	const Vector3 ToAngle() const noexcept
 	{
+		const double half = 180.0f;
 		return Vector3{
-			std::atan2(-z, std::hypot(x, y)) * (180.0f / M_PI),
-			std::atan2(y, x) * (180.0f / M_PI),
+			(float)(std::atan2(-z, std::hypot(x, y))* (half / M_PI)),
+			(float)(std::atan2(y, x) * (half / M_PI)),
 			0.0f };
 	}
 	Vector3 CalculateAngle(

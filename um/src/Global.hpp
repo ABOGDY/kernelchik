@@ -4,8 +4,6 @@
 #include "Vector.hpp"
 #include "offsets/offsets.hpp"
 #include "../ImGui/imgui.h"
-#include <vector>
-#include <map>
 
 static DWORD get_process_id(const wchar_t* process_name) {
 	DWORD process_id = 0;
@@ -100,26 +98,6 @@ namespace drivermem {
     }
 }
 
-namespace Base_Radar
-{
-    ImDrawList* DrawList = nullptr;
-    bool ShowCrossLine = false;
-    ImColor CrossColor = ImColor(255, 255, 255, 255);
-    float Proportion = 2680;
-    float CircleSize = 6;
-    float ArrowSize = 11;
-    float ArcArrowSize = 7;
-    float RenderRange = 250;
-    float LocalYaw = 0.0f;
-    bool Opened = true;
-    int  PointType = 0;
-    auto Pos = ImVec2(0,0);
-    float Width = 200;
-    
-    std::vector<ImVec4,ImColor> Points;
-    //std::vector<std::tuple< float, float, ImColor, int, float>> Points;
-    //std::map<float, float, ImColor, int, float , float> products;
-}
 
 //Screen Globals
 const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -128,6 +106,7 @@ const std::uintptr_t client = get_module_base(pid, L"client.dll");
 const std::uintptr_t engine = get_module_base(pid, L"engine2.dll");
 int screenWidth = drivermem::read_memory<uintptr_t>(driver, engine + engine2_dll::dwWindowWidth);; //GetSystemMetrics(SM_CXSCREEN)
 int screenHeight = drivermem::read_memory<uintptr_t>(driver,engine + engine2_dll::dwWindowHeight);  //GetSystemMetrics(SM_CYSCREEN)
+
 //Menu Globals
 bool espBoxT;
 bool espBoxE;
