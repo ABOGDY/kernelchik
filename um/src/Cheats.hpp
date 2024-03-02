@@ -24,6 +24,7 @@ namespace Cheats
 {
     void espLoop() //const int ProcessId, uintptr_t Client, uintptr_t Engine
     {
+        
         //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
         //const DWORD pid = ProcessId;
         //const std::uintptr_t client = Client;
@@ -97,36 +98,39 @@ namespace Cheats
             //sadasd
             //ScreenHead
             Vector3 head = { origin.x, origin.y, origin.z + 75.f };
+            static Vector2 oldangl;
+            Vector2 nangle = drivermem::read_memory<Vector2>(driver, client + client_dll::dwViewAngles);
 
+            Vector2 diffangl = nangle - oldangl;
+            char tstline1[40];
+            char tstline2[40];
+            sprintf_s(tstline1, "%f", diffangl.y);
+            sprintf_s(tstline2, "%f", diffangl.x);
+            Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+            Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+            int multplr = 4000;
+            tan(45 * 3.14159265 / 180.);
             //WorldToScreen Calls
-            Vector3 screenPos = origin.WorldtoScreen(viewMatrix);
-            Vector3 screenHead = head.WorldtoScreen(viewMatrix);
-            Vector3 boneHead = playerHead.WorldtoScreen(viewMatrix);
-            Vector3 boneNeck = playerNeck.WorldtoScreen(viewMatrix);
-            Vector3 boneShoulderL = playerShoulderL.WorldtoScreen(viewMatrix);
-            Vector3 boneShoulderR = playerShoulderR.WorldtoScreen(viewMatrix);
-            Vector3 boneForeL = playerForeL.WorldtoScreen(viewMatrix);
-            Vector3 boneForeR = playerForeR.WorldtoScreen(viewMatrix);
-            Vector3 boneHandL = playerHandL.WorldtoScreen(viewMatrix);
-            Vector3 boneHandR = playerHandR.WorldtoScreen(viewMatrix);
-            Vector3 boneWaist = playerWaist.WorldtoScreen(viewMatrix);
-            Vector3 boneKneeL = playerKneeL.WorldtoScreen(viewMatrix);
-            Vector3 boneKneeR = playerKneeR.WorldtoScreen(viewMatrix);
-            Vector3 boneFeetL = playerFeetL.WorldtoScreen(viewMatrix);
-            Vector3 boneFeetR = playerFeetR.WorldtoScreen(viewMatrix);
+            Vector3 screenPos = origin.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 screenHead = head.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneHead = playerHead.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneNeck = playerNeck.WorldtoScreen(viewMatrix)+Vector3(diffangl.y * multplr, diffangl.x * multplr,0.f);
+            Vector3 boneShoulderL = playerShoulderL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneShoulderR = playerShoulderR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneForeL = playerForeL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneForeR = playerForeR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneHandL = playerHandL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneHandR = playerHandR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneWaist = playerWaist.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneKneeL = playerKneeL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneKneeR = playerKneeR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneFeetL = playerFeetL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 boneFeetR = playerFeetR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
 
             //Define
             float height = abs(screenPos.y - screenHead.y);
             float width = height / 2.4f;
-            static Vector3 oldangl;
-            Vector3 nangle = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
-            //char tstline1[40];
-            //char tstline2[40];
-            //sprintf_s(tstline1, "%d", nangle.y);
-            //sprintf_s(tstline2, "%d", nangle.x);
-            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
-            //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
-            Vector3 diffangl = nangle - oldangl;
+            
             //Esp boxes
 
             //2d
@@ -298,7 +302,7 @@ namespace Cheats
     void Bhoppin() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
         if (Bhopbl == true)
         {
-
+            static int tmr = -4;
             //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
             //const DWORD pid = ProcessId;
             //const std::uintptr_t client = Client;
@@ -308,25 +312,31 @@ namespace Cheats
             const bool in_air = flags & (1 << 0);
             const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
             const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
-            if (space_pressed && in_air) {
-                Sleep(16);
+            //if (space_pressed && in_air) {
+            //    Sleep(16);
+            //    drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
+            //}
+            //else if (space_pressed && !in_air) {
+            //    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+            //}
+            //else if (!space_pressed && force_jump == 65537) {
+            //    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+            //}
+            if (space_pressed && in_air && tmr <= 0) {
                 drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
+                tmr = 10;
             }
             else if (space_pressed && !in_air) {
                 drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                tmr = -4;
             }
             else if (!space_pressed && force_jump == 65537) {
                 drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                tmr = -4;
             }
-            //if (space_pressed && in_air) {
-            //    keybd_event(VK_SPACE, 0, 0, 0);
-            //}
-            //else if (space_pressed && !in_air) {
-            //    keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
-            //}
-            //else if (!space_pressed) {
-            //    keybd_event(VK_SPACE, 0, KEYEVENTF_KEYUP, 0);
-            //}
+            if (tmr > 0) {
+                tmr -= 1;
+            }
 
         }
     }
@@ -619,7 +629,6 @@ namespace Cheats
                 {
                     POINT p;
                     GetCursorPos(&p);
-                    
                     switch (myWeapon)
                     {
                     case 1:
@@ -639,7 +648,11 @@ namespace Cheats
                         mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
                         tmr = 240;
                         break;
-
+                    case 64:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mrls = 100;
+                        tmr = 240;
+                        break;
                     default:
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
                         mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
@@ -649,12 +662,29 @@ namespace Cheats
                         
                 }
                 else if (Entityteam == Playerteam || Entityteam > 3) {
+                    POINT p;
+                    GetCursorPos(&p);
                     tmr = -4;
                 }
+                else if (Entityteam == Playerteam || Entityteam > 3) {
+                    POINT p;
+                    GetCursorPos(&p);
+                    mrls = -4;
+                    mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                }
+                
 
             }
             if (tmr > 0) {
                 tmr -= 1;
+            }
+            if (mrls > 0) {
+                mrls -= 1;
+            }
+            if (mrls<=0) {
+                POINT p;
+                GetCursorPos(&p);
+                mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
             }
         }
 

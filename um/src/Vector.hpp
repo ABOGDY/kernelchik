@@ -78,6 +78,9 @@ struct Vector2
 	
 	float x, y;
 };
+struct VecDoub3 {
+	double x, y, z;
+};
 struct Vector3
 {
 	// constructor
