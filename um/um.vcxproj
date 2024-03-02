@@ -74,12 +74,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)build\um_intermid\</IntDir>
-    <IncludePath>C:\Users\keks\source\repos\kernelchik\um\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\keks\source\gitchik\kernelchik\um\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)build\um_intermid\</IntDir>
-    <IncludePath>C:\Users\keks\source\repos\kernelchik\um\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\keks\source\gitchik\kernelchik\um\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

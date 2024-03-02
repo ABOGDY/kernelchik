@@ -3,6 +3,9 @@
 #include <TlHelp32.h>
 #include "Vector.hpp"
 #include "offsets/offsets.hpp"
+#include "../ImGui/imgui.h"
+#include <vector>
+#include <map>
 
 static DWORD get_process_id(const wchar_t* process_name) {
 	DWORD process_id = 0;
@@ -97,6 +100,27 @@ namespace drivermem {
     }
 }
 
+namespace Base_Radar
+{
+    ImDrawList* DrawList = nullptr;
+    bool ShowCrossLine = false;
+    ImColor CrossColor = ImColor(255, 255, 255, 255);
+    float Proportion = 2680;
+    float CircleSize = 6;
+    float ArrowSize = 11;
+    float ArcArrowSize = 7;
+    float RenderRange = 250;
+    float LocalYaw = 0.0f;
+    bool Opened = true;
+    int  PointType = 0;
+    auto Pos = ImVec2(0,0);
+    float Width = 200;
+    
+    std::vector<ImVec4,ImColor> Points;
+    //std::vector<std::tuple< float, float, ImColor, int, float>> Points;
+    //std::map<float, float, ImColor, int, float , float> products;
+}
+
 //Screen Globals
 const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 const DWORD pid = get_process_id(L"cs2.exe");
@@ -124,3 +148,13 @@ bool AimBotbl;
 bool TriggerBotbl;
 //Debug globals
 int closestvectrx;
+//radar
+bool show_radar = false;
+float radar_range = 150;
+float radar_point_size_proportion = 1;
+bool show_radar_crossline = false;
+ImColor radar_crossline_color = ImColor(255, 255, 255, 255);
+int radar_type = 2;
+float proportion = 3300;
+bool custom_radar = false;
+float radar_bg_alpha = 0.1;

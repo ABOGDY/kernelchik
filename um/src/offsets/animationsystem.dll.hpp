@@ -352,7 +352,7 @@ namespace CAnimMovement {
     constexpr std::ptrdiff_t v0 = 0x8; // float
     constexpr std::ptrdiff_t v1 = 0xC; // float
     constexpr std::ptrdiff_t angle = 0x10; // float
-    constexpr std::ptrdiff_t vector = 0x14; // Vector
+    constexpr std::ptrdiff_t vectoran = 0x14; // Vector
     constexpr std::ptrdiff_t position = 0x20; // Vector
 }
 

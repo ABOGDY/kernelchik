@@ -4,6 +4,7 @@
 #include "Render.hpp"
 #include "offsets/offsets.hpp"
 #include "offsets/client.dll.hpp"
+#include "../ImGui/imgui.h"
 #include "Global.hpp"
 #include <Windows.h>
 
@@ -119,6 +120,12 @@ namespace Cheats
             float width = height / 2.4f;
             static Vector3 oldangl;
             Vector3 nangle = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
+            //char tstline1[40];
+            //char tstline2[40];
+            //sprintf_s(tstline1, "%d", nangle.y);
+            //sprintf_s(tstline2, "%d", nangle.x);
+            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+            //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
             Vector3 diffangl = nangle - oldangl;
             //Esp boxes
 
@@ -194,12 +201,12 @@ namespace Cheats
             //float Yaw = atan2f(OppPos.y, OppPos.x) * 57.295779513 - Local.Pawn.ViewAngle.y;
             //float Pitch = -atan(OppPos.z / Distance) * 57.295779513 - Local.Pawn.ViewAngle.x;
             //Esp Skelton
-            char tstline1[40];
-            char tstline2[40];
-            sprintf_s(tstline1, "%d", diffangl.y);
-            sprintf_s(tstline2, "%d", diffangl.x);
-            Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
-            Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+            //char tstline1[40];
+            //char tstline2[40];
+            //sprintf_s(tstline1, "%d", diffangl.y);
+            //sprintf_s(tstline2, "%d", diffangl.x);
+            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+            //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
             if (playerTeam == myTeam && espSkeltonT == true)
             {
                 Render::DrawLine(boneNeck.x, boneNeck.y, boneHead.x, boneHead.y, ImColor(1.f, 1.f, 1.f), 1.5f);
@@ -264,7 +271,7 @@ namespace Cheats
         }
 
     }
-    //¿¬¿œ€¬œ€
+    
     void fovJChanger() {
         //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
         //const DWORD pid = ProcessId;
@@ -545,8 +552,54 @@ namespace Cheats
     }
 
     void TriggerBot() {
+        enum weaponslist {
+            nothing = 0,
+            deagle = 1,
+            dualberretas = 2,
+            fiveseven = 3,
+            glock = 4,
+            ak47 = 7,
+            aug = 8,
+            awp = 9,
+            famas = 10,
+            g3sg1 = 11,
+            galil = 13,
+            m248 = 14,
+            m4a4 = 16,
+            mac9 = 17,
+            p90 = 19,
+            mp5sd = 23,
+            ump = 24,
+            xm = 25,
+            ppbizon = 26,
+            mag7 = 27,
+            negev = 28,
+            savedoff = 29,
+            tec = 30,
+            zeus = 31,
+            p2000 = 32,
+            mp7 = 33,
+            mp9 = 34,
+            nova = 35,
+            scar = 38,
+            sg553 = 39,
+            ssg09 = 40,
+            ctknife = 42,
+            flashbang = 43,
+            he = 44,
+            smoke = 45,
+            moly = 46,
+            decoy = 47,
+            incgr = 48,
+            bomba = 49,
+            knife = 59,
+            m4a1s = 60,
+            cz75 = 63,
+            revolver = 64,
+        };
         if (GetAsyncKeyState(VK_XBUTTON2) && TriggerBotbl == true) {
             static int tmr = -4;
+            static int mrls = -4;
             const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
             const auto crosshair_ent = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex); //C_CSPlayerPawnBase::m_iIDEntIndex
             if (crosshair_ent > 0) {
@@ -556,17 +609,44 @@ namespace Cheats
                 const auto Entityteam = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
                 const auto Playerteam = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
                 const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
-                //char tstline[40];
-                //sprintf_s(tstline, "%d", Entityteam);
-                //Render::DrawTextz(100, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+                auto myWeapon = drivermem::read_memory<uintptr_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_pClippingWeapon);
+                auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
+                char tstline[40];
+                sprintf_s(tstline, "%d", wepindx);
+                Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
 
                 if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
                 {
                     POINT p;
                     GetCursorPos(&p);
-                    mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                    mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                    tmr = 140;
+                    
+                    switch (myWeapon)
+                    {
+                    case 1:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 180;
+                        break;
+
+                    case 4:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 100;
+                        break;
+
+                    case 9:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 240;
+                        break;
+
+                    default:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 140;
+                        break;
+                    }
+                        
                 }
                 else if (Entityteam == Playerteam || Entityteam > 3) {
                     tmr = -4;
@@ -579,5 +659,41 @@ namespace Cheats
         }
 
     }
+        
+    
+
+    void RadarHackneg() {
+
+        ImGui::SetNextWindowBgAlpha(radar_bg_alpha);
+        //ImGui::Begin(X("Radar"), 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+        ImGui::SetWindowSize({radar_range * 2,radar_range * 2 });
+
+        if (!custom_radar)
+        {
+            ImGui::SetWindowPos(ImVec2(0, 0));
+            show_radar_crossline = false;
+            proportion = 3300.f;
+            radar_point_size_proportion = 1.f;
+            radar_range = 150.f;
+            radar_bg_alpha = 0.1f;
+        }
+
+        // Radar.SetPos({ Gui.Window.Size.x / 2,Gui.Window.Size.y / 2 });
+        Base_Radar::DrawList = ImGui::GetWindowDrawList();
+        Base_Radar::Pos = ImVec2(ImGui::GetWindowPos().x + radar_range, ImGui::GetWindowPos().y + radar_range);
+        Base_Radar::Proportion = proportion;
+        //Base_Radar::Range = radar_range;
+        //Base_Radar::Size = radar_range * 2;
+        Base_Radar::CrossColor = radar_crossline_color;
+
+        Base_Radar::ArcArrowSize *= radar_point_size_proportion;
+        Base_Radar::ArrowSize *= radar_point_size_proportion;
+        Base_Radar::CircleSize *= radar_point_size_proportion;
+
+        Base_Radar::ShowCrossLine = radar_crossline_color;
+        Base_Radar::Opened = true;
+
+    }
+
 }
 

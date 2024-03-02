@@ -23,6 +23,17 @@ struct view_matrix_t
 
 	float matrix[4][4];
 };
+namespace VecMath {
+	Vector2 RevolveCoordinatesSystem(float RevolveAngle, Vector2 OriginPos, Vector2 DestPos)
+	{
+		Vector2 ResultPos;
+		if (RevolveAngle == 0)
+			return DestPos;
+		ResultPos.x = OriginPos.x + (DestPos.x - OriginPos.x) * cos(RevolveAngle * M_PI / 180) + (DestPos.y - OriginPos.y) * sin(RevolveAngle * M_PI / 180);
+		ResultPos.y = OriginPos.y - (DestPos.x - OriginPos.x) * sin(RevolveAngle * M_PI / 180) + (DestPos.y - OriginPos.y) * cos(RevolveAngle * M_PI / 180);
+		return ResultPos;
+	}
+}
 struct Vector2
 {
 	Vector2(
@@ -73,6 +84,7 @@ struct Vector2
 	{
 		return sqrtf(powf(Pos.x - x, 2) + powf(Pos.y - y, 2));
 	}
+	
 	float x, y;
 };
 struct Vector3
@@ -125,8 +137,8 @@ struct Vector3
 	const Vector3 ToAngle() const noexcept
 	{
 		return Vector3{
-			std::atan2(-z, std::hypot(x, y)) * (180.0f / std::numbers::pi_v<float>),
-			std::atan2(y, x) * (180.0f / std::numbers::pi_v<float>),
+			std::atan2(-z, std::hypot(x, y)) * (180.0f / M_PI),
+			std::atan2(y, x) * (180.0f / M_PI),
 			0.0f };
 	}
 	Vector3 CalculateAngle(
@@ -164,4 +176,34 @@ struct Vector3
 	}
 	// struct data
 	float x, y, z;
+};
+struct Vector4 {
+	Vector4(
+		const float x = 0.f,
+		const float y = 0.f,
+		const float z = 0.f,
+		const float w = 0.f) noexcept :
+		x(x), y(y), z(z), w(w) { }
+
+	const Vector4 operator-(const Vector4& other) const noexcept
+	{
+		return Vector4{ x - other.x, y - other.y, z - other.z, w - other.w };
+	}
+
+	const Vector4 operator+(const Vector4& other) const noexcept
+	{
+		return Vector4{ x + other.x, y + other.y, z + other.z, w + other.w };
+	}
+
+	const Vector4 operator/(const float factor) const noexcept
+	{
+		return Vector4{ x / factor, y / factor, z / factor,w / factor };
+	}
+
+	const Vector4 operator*(const float factor) const noexcept
+	{
+		return Vector4{ x * factor, y * factor, z * factor,w * factor };
+	}
+	// utils
+	float x, y, z, w;
 };
