@@ -22,6 +22,19 @@ struct BoneJointPos
 
 namespace Cheats
 {
+    void CALLBACK LowLevelMouseProc(
+        _In_ int    nCode,
+        _In_ WPARAM wParam,
+        _In_ LPARAM lParam
+    ) {
+        mousemov = ImVec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));//return DefWindowProc(hwnd, message, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        };
+    void CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+
+        if (message == WM_MOUSEMOVE) {
+            mousemov = ImVec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        }
+    }
     void espLoop() //const int ProcessId, uintptr_t Client, uintptr_t Engine
     {
         
@@ -37,7 +50,23 @@ namespace Cheats
         int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
 
         uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
+        static Vector2 oldangl;
+        Vector2 nangle = drivermem::read_memory<Vector2>(driver, client + client_dll::dwViewAngles);
 
+        float multplr = 1.4;
+        //static ImVec2 oldmpos;
+        float diffanglradx = (oldangl.x - nangle.x) * multplr;
+        float diffanglrady = (oldangl.y - nangle.y) * multplr;
+        //float diffanglradx = (mousemov.x) * (180.0 / M_PI) * multplr;
+        //float diffanglrady = (mousemov.y) * (180.0 / M_PI) * multplr;
+
+        Vector2 diffangl = Vector2(0, 0);//-diffanglradx, -diffanglrady); //
+        //char tstline1[40];
+        //char tstline2[40];
+        //sprintf_s(tstline1, "%f", diffangl.x);
+        //sprintf_s(tstline2, "%f", diffangl.y);
+        //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+        //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
         for (int i = 1; i < 64; i++)
         {
             uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
@@ -98,34 +127,24 @@ namespace Cheats
             //sadasd
             //ScreenHead
             Vector3 head = { origin.x, origin.y, origin.z + 75.f };
-            static Vector2 oldangl;
-            Vector2 nangle = drivermem::read_memory<Vector2>(driver, client + client_dll::dwViewAngles);
-
-            Vector2 diffangl = nangle - oldangl;
-            char tstline1[40];
-            char tstline2[40];
-            sprintf_s(tstline1, "%f", diffangl.y);
-            sprintf_s(tstline2, "%f", diffangl.x);
-            Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
-            Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
-            int multplr = 4000;
-            tan(45 * 3.14159265 / 180.);
+            
+            
             //WorldToScreen Calls
-            Vector3 screenPos = origin.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 screenHead = head.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneHead = playerHead.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneNeck = playerNeck.WorldtoScreen(viewMatrix)+Vector3(diffangl.y * multplr, diffangl.x * multplr,0.f);
-            Vector3 boneShoulderL = playerShoulderL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneShoulderR = playerShoulderR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneForeL = playerForeL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneForeR = playerForeR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneHandL = playerHandL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneHandR = playerHandR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneWaist = playerWaist.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneKneeL = playerKneeL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneKneeR = playerKneeR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneFeetL = playerFeetL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
-            Vector3 boneFeetR = playerFeetR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y * multplr, diffangl.x * multplr, 0.f);
+            Vector3 screenPos = origin.WorldtoScreen(viewMatrix) + Vector3(diffangl.y, diffangl.x , 0.f);
+            Vector3 screenHead = head.WorldtoScreen(viewMatrix) + Vector3(diffangl.y, diffangl.x , 0.f);
+            Vector3 boneHead = playerHead.WorldtoScreen(viewMatrix) + Vector3(diffangl.y, diffangl.x , 0.f);
+            Vector3 boneNeck = playerNeck.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x ,0.f);
+            Vector3 boneShoulderL = playerShoulderL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneShoulderR = playerShoulderR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneForeL = playerForeL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneForeR = playerForeR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneHandL = playerHandL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneHandR = playerHandR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneWaist = playerWaist.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneKneeL = playerKneeL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneKneeR = playerKneeR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneFeetL = playerFeetL.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
+            Vector3 boneFeetR = playerFeetR.WorldtoScreen(viewMatrix) + Vector3(diffangl.y , diffangl.x , 0.f);
 
             //Define
             float height = abs(screenPos.y - screenHead.y);
@@ -271,9 +290,16 @@ namespace Cheats
                 if (playerHealth <= 25 && playerHealth >= 1)
                     Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), height / 60, ImColor(1.f, 0.f, 0.f));
             }
-            oldangl = nangle;
+            //if (tmr <= 0) {
+            //    tmr = 10;
+            //}
+            //else if (tmr > 0) {
+            //    tmr -= 1;
+            //}
+            //oldmpos.x = mousemov;
         }
 
+        oldangl = nangle;
     }
     
     void fovJChanger() {
@@ -282,21 +308,11 @@ namespace Cheats
         //const std::uintptr_t client = Client;
         //const std::uintptr_t engine = Engine;
         const auto local_player_cont = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerController);
-        static int fovchik;
         static bool bToggled = false;
-        if (GetAsyncKeyState('J') && !bToggled) {
-            if (fovchik == 120) {
-                fovchik = 20;
-            }
-            else if (fovchik != 120) {
-                fovchik = 120;
-            }
-            bToggled = true;
+        drivermem::write_memory(driver, local_player_cont + CBasePlayerController::m_iDesiredFOV, FOV);
+        if (FovButton == false) {
+            FOV = 90;
         }
-        else if (!GetAsyncKeyState('J')) {
-            bToggled = false;
-        }
-        drivermem::write_memory(driver, local_player_cont + CBasePlayerController::m_iDesiredFOV, fovchik);
     }
 
     void Bhoppin() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
@@ -312,42 +328,51 @@ namespace Cheats
             const bool in_air = flags & (1 << 0);
             const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
             const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
-            //if (space_pressed && in_air) {
-            //    Sleep(16);
-            //    drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
-            //}
-            //else if (space_pressed && !in_air) {
-            //    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-            //}
-            //else if (!space_pressed && force_jump == 65537) {
-            //    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-            //}
-            if (space_pressed && in_air && tmr <= 0) {
-                drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
-                tmr = 10;
+            const bool legacy = true;
+            if (legacy == true) {
+                if (space_pressed && in_air) {
+                    Sleep(16);
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
+                }
+                else if (space_pressed && !in_air) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                }
+                else if (!space_pressed && force_jump == 65537) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                }
+                else if (space_pressed && in_air && force_jump == 65537) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                }
             }
-            else if (space_pressed && !in_air) {
-                drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                tmr = -4;
+            else if (legacy == false) {
+                if (space_pressed && in_air && tmr <= 0) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
+                    tmr = 18;
+                }
+                else if (space_pressed && !in_air) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                    tmr = -4;
+                }
+                else if (!space_pressed && force_jump == 65537) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                    tmr = -4;
+                }
+                else if (space_pressed && in_air && force_jump == 65537) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
+                    tmr = -4;
+                }
+                if (tmr > 0) {
+                   tmr -= 1;
+                }
             }
-            else if (!space_pressed && force_jump == 65537) {
-                drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                tmr = -4;
-            }
-            if (tmr > 0) {
-                tmr -= 1;
-            }
-
         }
     }
 
-    void AntiFlash() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
-        //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-        //const DWORD pid = ProcessId;
-        //const std::uintptr_t client = Client;
-        //const std::uintptr_t engine = Engine;
-        const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
-        drivermem::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
+    void AntiFlash() { 
+        if (AntiFlasha == true) {
+            const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+            drivermem::write_memory(driver, local_player_pawn + C_CSPlayerPawnBase::m_flFlashDuration, 0.f);
+        }
     }
 
     void AimBot() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
@@ -562,6 +587,7 @@ namespace Cheats
     }
 
     void TriggerBot() {
+        
         enum weaponslist {
             nothing = 0,
             deagle = 1,
@@ -608,10 +634,16 @@ namespace Cheats
             revolver = 64,
         };
         if (GetAsyncKeyState(VK_XBUTTON2) && TriggerBotbl == true) {
+            uintptr_t LocalPlayerPawn = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
             static int tmr = -4;
             static int mrls = -4;
             const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
             const auto crosshair_ent = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex); //C_CSPlayerPawnBase::m_iIDEntIndex
+            auto myWeapon = drivermem::read_memory<uintptr_t>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
+            auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
+            //char tstline1[40];
+            //sprintf_s(tstline1, "%d", myWeapon);
+            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
             if (crosshair_ent > 0) {
                 const auto entlist = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwEntityList);
                 const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, entlist + 0x8 * (crosshair_ent >> 9) + 0x10);
@@ -619,17 +651,15 @@ namespace Cheats
                 const auto Entityteam = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
                 const auto Playerteam = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
                 const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
-                auto myWeapon = drivermem::read_memory<uintptr_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_pClippingWeapon);
-                auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
-                char tstline[40];
-                sprintf_s(tstline, "%d", wepindx);
-                Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+                //char tstline[40];
+                //sprintf_s(tstline, "%d", wepindx);
+                //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
 
                 if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
                 {
                     POINT p;
                     GetCursorPos(&p);
-                    switch (myWeapon)
+                    switch (wepindx)
                     {
                     case 1:
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
@@ -646,39 +676,38 @@ namespace Cheats
                     case 9:
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
                         mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        tmr = 240;
+                        tmr = 8040;
                         break;
                     case 64:
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                        mrls = 100;
-                        tmr = 240;
+                        //Sleep(80);
+                        //mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 200;
                         break;
                     default:
+                        Sleep(1);
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
                         mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        tmr = 140;
+                        tmr = 100;
                         break;
                     }
                         
                 }
-                else if (Entityteam == Playerteam || Entityteam > 3) {
-                    POINT p;
-                    GetCursorPos(&p);
-                    tmr = -4;
-                }
-                else if (Entityteam == Playerteam || Entityteam > 3) {
-                    POINT p;
-                    GetCursorPos(&p);
-                    mrls = -4;
-                    mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                }
+                //else if (Entityteam == Playerteam || Entityteam > 3) {
+                //    POINT p;
+                //    GetCursorPos(&p);
+                //    tmr = -4;
+                //    mrls = -4;
+                //}
                 
-
+            
             }
             if (tmr > 0) {
                 tmr -= 1;
             }
             if (mrls > 0) {
+                POINT p;
+                GetCursorPos(&p);
                 mrls -= 1;
             }
             if (mrls<=0) {
@@ -686,6 +715,8 @@ namespace Cheats
                 GetCursorPos(&p);
                 mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
             }
+
+            
         }
 
     }

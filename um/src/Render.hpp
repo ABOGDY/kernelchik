@@ -64,6 +64,7 @@ namespace Menus
 	{
 		if (menu == true)
 		{
+
 			ImGui::SetNextWindowPos({ 0,0 });
 			ImGui::SetNextWindowSize({ 250,345 });
 
@@ -152,6 +153,12 @@ namespace Menus
 					{
 
 						ImGui::Checkbox("BH", &Bhopbl);
+
+						ImGui::Checkbox("FOV", &FovButton);
+						if (FovButton == true) {
+							ImGui::SliderInt(" ", &FOV, 70, 130);
+						}
+						ImGui::Checkbox("AntiFlash", &AntiFlasha);
 						
 					}
 					ImGui::EndChild();

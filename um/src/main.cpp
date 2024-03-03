@@ -9,6 +9,7 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <iostream>
+#include <mmsystem.h>
 
 #include "../ImGui/imgui_impl_win32.h"
 #include "../ImGui/imgui.h"
@@ -19,7 +20,7 @@
 #include "Vector.hpp"
 #include "Cheats.hpp"
 #include "Render.hpp"
-
+#pragma comment(lib, "Winmm.lib")
 struct Vectorr3
 {
 	float x, y, z;
@@ -67,14 +68,12 @@ LRESULT CALLBACK window_procedure(HWND window, UINT message, WPARAM w_param, LPA
 		PostQuitMessage(0);
 		return 0L;
 	}
-
 	return DefWindowProc(window, message, w_param, l_param);
 }
 
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 	std::cout << "bebra \n";
-
 	if (pid == 0) {
 		std::cout << "Failed to find cs2 \n";
 		std::cin.get();
@@ -179,6 +178,8 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 			ImGui_ImplWin32_Init(Overlay);;
 			ImGui_ImplDX11_Init(device, device_context);
 
+			
+
 			while (true) {
 				
 				MSG msg;
@@ -198,10 +199,13 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 
 				if (GetAsyncKeyState(VK_INSERT) < 0)
 				{
-					if (menu == false)
+					if (menu == false) {
 						menu = true;
-					else
+						PlaySoundA((LPCSTR)"C:\\rizz.wav", NULL, SND_FILENAME | SND_ASYNC);
+					}
+					else {
 						menu = false;
+					}
 					Sleep(150);
 				}
 
@@ -211,6 +215,8 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				Cheats::AntiFlash();
 				//Cheats::AimBot();
 				Cheats::TriggerBot();
+				Cheats::fovJChanger();
+				Cheats::AntiFlash();
 				ImGui::Render();
 
 				constexpr float color[4](0.f, 0.f, 0.f, 0.f);

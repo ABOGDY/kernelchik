@@ -100,6 +100,7 @@ namespace drivermem {
 
 
 //Screen Globals
+static ImVec2 mousemov;
 const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 const DWORD pid = get_process_id(L"cs2.exe");
 const std::uintptr_t client = get_module_base(pid, L"client.dll");
@@ -107,11 +108,14 @@ const std::uintptr_t engine = get_module_base(pid, L"engine2.dll");
 int screenWidth = drivermem::read_memory<uintptr_t>(driver, engine + engine2_dll::dwWindowWidth);; //GetSystemMetrics(SM_CXSCREEN)
 int screenHeight = drivermem::read_memory<uintptr_t>(driver,engine + engine2_dll::dwWindowHeight);  //GetSystemMetrics(SM_CYSCREEN)
 
+//Timers
+int trigtmr = -4;
+
 //Menu Globals
 bool espBoxT;
 bool espBoxE;
 bool espSkeltonT;
-bool espSkeltonE;
+bool espSkeltonE = true;
 bool espHeadT;
 bool espHeadE;
 bool espHealthBarT;
@@ -123,10 +127,15 @@ int TeamActiveCombo;
 int EnemyActiveCombo;
 const char* ComboSelections[3] = { "2D Box", "3D Box", "Corners" };
 bool Bhopbl = true; 
+bool FovButton = false;
+bool AntiFlasha = true;
+int FOV = 90;
 bool AimBotbl;
-bool TriggerBotbl;
+bool TriggerBotbl = true;
+
 //Debug globals
 int closestvectrx;
+
 //radar
 bool show_radar = false;
 float radar_range = 150;
