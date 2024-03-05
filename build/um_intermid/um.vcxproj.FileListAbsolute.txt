@@ -1,0 +1,2 @@
+C:\Users\keks\Source\gitchik\kernelchik\build\um.exe.lastcodeanalysissucceeded
+C:\Users\keks\Source\gitchik\kernelchik\build\um_intermid\NativeCodeAnalysis.read.1.tlog

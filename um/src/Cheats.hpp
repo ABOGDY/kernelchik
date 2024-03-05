@@ -22,19 +22,6 @@ struct BoneJointPos
 
 namespace Cheats
 {
-    void CALLBACK LowLevelMouseProc(
-        _In_ int    nCode,
-        _In_ WPARAM wParam,
-        _In_ LPARAM lParam
-    ) {
-        mousemov = ImVec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));//return DefWindowProc(hwnd, message, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        };
-    void CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
-
-        if (message == WM_MOUSEMOVE) {
-            mousemov = ImVec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        }
-    }
     void espLoop() //const int ProcessId, uintptr_t Client, uintptr_t Engine
     {
         
@@ -42,20 +29,21 @@ namespace Cheats
         //const DWORD pid = ProcessId;
         //const std::uintptr_t client = Client;
         // const std::uintptr_t engine = Engine;
-
+        //auto cameraServices = drivermem::read_memory<std::uintptr_t>(driver, local_player_pawn + C_BasePlayerPawn::m_pCameraServices);
+        //const auto currentFOV = drivermem::read_memory<uint32_t>(driver, cameraServices + CCSPlayerBase_CameraServices::m_iFOV);
         uintptr_t LocalPlayerPawn = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
         view_matrix_t viewMatrix = drivermem::read_memory<view_matrix_t>(driver, client + client_dll::dwViewMatrix);
-
+        
         int myHealth = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iHealth);
         int myTeam = drivermem::read_memory<int>(driver, LocalPlayerPawn + C_BaseEntity::m_iTeamNum);
 
         uintptr_t Entity = drivermem::read_memory<uintptr_t>(driver, client + client_dll::dwEntityList);
-        static Vector2 oldangl;
-        Vector2 nangle = drivermem::read_memory<Vector2>(driver, client + client_dll::dwViewAngles);
+        static Vector3 oldangl;
+        Vector3 nangle = drivermem::read_memory<Vector3>(driver, client + client_dll::dwViewAngles);
 
         float multplr = 1.4;
         //static ImVec2 oldmpos;
-        float diffanglradx = (oldangl.x - nangle.x) * multplr;
+        float diffanglradx = (oldangl.z - nangle.z) * multplr;
         float diffanglrady = (oldangl.y - nangle.y) * multplr;
         //float diffanglradx = (mousemov.x) * (180.0 / M_PI) * multplr;
         //float diffanglrady = (mousemov.y) * (180.0 / M_PI) * multplr;
@@ -63,10 +51,13 @@ namespace Cheats
         Vector2 diffangl = Vector2(0, 0);//-diffanglradx, -diffanglrady); //
         //char tstline1[40];
         //char tstline2[40];
-        //sprintf_s(tstline1, "%f", diffangl.x);
-        //sprintf_s(tstline2, "%f", diffangl.y);
+        //char tstline3[40];
+        //sprintf_s(tstline1, "%f", diffanglradx);
+        //sprintf_s(tstline2, "%f", diffanglrady);
+        //sprintf_s(tstline3, "%f", nangle.z);
         //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
-        //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+        //Render::DrawTextz(200, 190, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+        //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline3);
         for (int i = 1; i < 64; i++)
         {
             uintptr_t listEntity = drivermem::read_memory<uintptr_t>(driver, Entity + ((8 * (i & 0x7FFF) >> 9) + 16));
@@ -93,7 +84,8 @@ namespace Cheats
             int playerTeam = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iTeamNum);
             int playerHealth = drivermem::read_memory<int>(driver, entityPawn + C_BaseEntity::m_iHealth);
             int playerArmor = drivermem::read_memory<int>(driver, entityPawn + C_CSPlayerPawnBase::m_ArmorValue);
-
+            
+            
             if (playerHealth <= 1 || playerHealth > 100)
                 continue;
 
@@ -102,11 +94,11 @@ namespace Cheats
 
             //Rendering
 
-            //Entity Feet
-            Vector3 origin = drivermem::read_memory<Vector3>(driver, entityPawn + CGameSceneNode::m_vecOrigin);
-
             //Bones Pointer
             uint64_t gameScene = drivermem::read_memory<uint64_t>(driver, entityPawn + C_BaseEntity::m_pGameSceneNode);
+
+            //Entity Feet
+            Vector3 origin = drivermem::read_memory<Vector3>(driver, gameScene + CGameSceneNode::m_vecOrigin); 
 
             //Bones
             uint64_t boneArray = drivermem::read_memory<uint64_t>(driver, gameScene + CSkeletonInstance::m_modelState + 0x80);
@@ -160,6 +152,7 @@ namespace Cheats
            
             //3d
 
+            
 
             //Corners
             if (playerTeam == myTeam && espBoxT == true && TeamActiveCombo == 2)
@@ -214,12 +207,18 @@ namespace Cheats
                 //Right
                 Render::DrawLine(screenPos.x + width / 3, screenPos.y - height / 10, screenPos.x + width / 3, screenPos.y, ImColor(EnemyFrameColor[0], EnemyFrameColor[1], EnemyFrameColor[2]), 1.5f);
             }
-
+            
             //Esp Head Circle
+            struct CSEntity {
+                char name[128];
+            };
+            char tstline1[128];
+            CSEntity enmname = drivermem::read_memory<CSEntity>(driver, entityController + CBasePlayerController::m_iszPlayerName);
+            sprintf_s(tstline1, "%s", enmname);
             if (playerTeam == myTeam && espHeadT == true)
-                Render::DrawHeadCircle(boneHead.x, boneHead.y, width / 7.f, ImColor(1.f, 1.f, 1.f), 1.5f);
+                Render::DrawTextz(screenHead.x, screenHead.y-10, ImColor(1.f, 1.f, 1.f, 1.f), tstline1);
             else if (playerTeam != myTeam && espHeadE == true)
-                Render::DrawHeadCircle(boneHead.x, boneHead.y, width / 7.f, ImColor(1.f, 1.f, 1.f), 1.5f);
+                Render::DrawTextz(screenHead.x, screenHead.y-10, ImColor(1.f, 1.f, 1.f, 1.f), tstline1);
 
             //float Yaw = atan2f(OppPos.y, OppPos.x) * 57.295779513 - Local.Pawn.ViewAngle.y;
             //float Pitch = -atan(OppPos.z / Distance) * 57.295779513 - Local.Pawn.ViewAngle.x;
@@ -260,35 +259,41 @@ namespace Cheats
                 Render::DrawLine(boneKneeL.x, boneKneeL.y, boneFeetL.x, boneFeetL.y, ImColor(1.f, 1.f, 1.f), 1.5f);
                 Render::DrawLine(boneKneeR.x, boneKneeR.y, boneFeetR.x, boneFeetR.y, ImColor(1.f, 1.f, 1.f), 1.5f);
             }
-
             //Health Bar If(s)
+            int heightmult = height / 30;
+            if (heightmult <= 0) {
+                heightmult = 1;
+            }
+            else if (heightmult >= 40) {
+                heightmult = 40;
+            }
             if (playerTeam == myTeam && espHealthBarT == true)
             {
                 if (playerHealth <= 100 && playerHealth >= 76)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, width, height / 60, ImColor(0.f, 1.f, 0.f));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, width, heightmult, ImColor(0.f, 1.f, 0.f));
 
                 if (playerHealth <= 75 && playerHealth >= 51)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 1.5f), height / 60, ImColor(255.f, 255.f, 0.f));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 1.5f), heightmult, ImColor(255.f, 255.f, 0.f));
 
                 if (playerHealth <= 50 && playerHealth >= 26)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 2.5f), height / 60, ImColor(255, 127, 80));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 2.5f), heightmult, ImColor(255, 127, 80));
 
                 if (playerHealth <= 25 && playerHealth >= 1)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), height / 60, ImColor(1.f, 0.f, 0.f));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), heightmult, ImColor(1.f, 0.f, 0.f));
             }
             else if (playerTeam != myTeam && espHealthBarE == true)
             {
                 if (playerHealth <= 100 && playerHealth >= 76)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, width, height / 60, ImColor(0.f, 1.f, 0.f));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, width, heightmult, ImColor(0.f, 1.f, 0.f));
 
                 if (playerHealth <= 75 && playerHealth >= 51)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 1.5f), height / 60, ImColor(255.f, 255.f, 0.f));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 1.5f), heightmult, ImColor(255.f, 255.f, 0.f));
 
                 if (playerHealth <= 50 && playerHealth >= 26)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 2.5f), height / 60, ImColor(255, 127, 80));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 2.5f), heightmult, ImColor(255, 127, 80));
 
                 if (playerHealth <= 25 && playerHealth >= 1)
-                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), height / 60, ImColor(1.f, 0.f, 0.f));
+                    Render::DrawHealhBar(screenPos.x - width / 2, screenPos.y, (width / 4.5f), heightmult, ImColor(1.f, 0.f, 0.f));
             }
             //if (tmr <= 0) {
             //    tmr = 10;
@@ -300,6 +305,7 @@ namespace Cheats
         }
 
         oldangl = nangle;
+        //Sleep(60);
     }
     
     void fovJChanger() {
@@ -313,12 +319,32 @@ namespace Cheats
         if (FovButton == false) {
             FOV = 90;
         }
+        
+        //const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        //static bool bToggled = false;
+
+        //auto cameraServices = drivermem::read_memory<std::uintptr_t>(driver, local_player_pawn + C_BasePlayerPawn::m_pCameraServices);
+        //const auto currentFOV = drivermem::read_memory<uint32_t>(driver, cameraServices + CCSPlayerBase_CameraServices::m_iFOV);
+
+        //bool isScoped = drivermem::read_memory<bool>(driver, local_player_pawn + C_CSPlayerPawnBase::m_bIsScoped);
+            //if (!isScoped && currentFOV != FOV) {
+            //    drivermem::write_memory(driver, cameraServices + CCSPlayerBase_CameraServices::m_iFOV, FOV);
+            //}
+        
     }
 
     void Bhoppin() { //const int ProcessId, uintptr_t Client, uintptr_t Engine
         if (Bhopbl == true)
         {
+            static bool lockon = false;
             static int tmr = -4;
+            static int stmr = -4;
+            static int oldstmr = -4;
+            static int jmpstr = 256;
+            static int oldjstr = 256;
+            static int counter = 0;
+            static int fjstr = 256;
+            static int oldfjstr = 256;
             //const HANDLE driver = CreateFile(L"\\\\.\\Kernelchik", GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
             //const DWORD pid = ProcessId;
             //const std::uintptr_t client = Client;
@@ -329,6 +355,7 @@ namespace Cheats
             const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
             const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
             const bool legacy = true;
+
             if (legacy == true) {
                 if (space_pressed && in_air) {
                     Sleep(16);
@@ -336,34 +363,77 @@ namespace Cheats
                 }
                 else if (space_pressed && !in_air) {
                     drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                }
-                else if (!space_pressed && force_jump == 65537) {
-                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                }
-                else if (space_pressed && in_air && force_jump == 65537) {
-                    drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                }
-            }
-            else if (legacy == false) {
-                if (space_pressed && in_air && tmr <= 0) {
                     drivermem::write_memory(driver, client + client_dll::dwForceJump, 65537);
-                    tmr = 18;
-                }
-                else if (space_pressed && !in_air) {
                     drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                    tmr = -4;
                 }
                 else if (!space_pressed && force_jump == 65537) {
                     drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                    tmr = -4;
                 }
                 else if (space_pressed && in_air && force_jump == 65537) {
                     drivermem::write_memory(driver, client + client_dll::dwForceJump, 256);
-                    tmr = -4;
                 }
-                if (tmr > 0) {
-                   tmr -= 1;
+                //C_BasePlayerPawn::m_pMovementServices CPlayer_MovementServices::m_flLeftMove CCSPlayer_MovementServices::m_vecLeft
+            }   //CPlayer_MovementServices::m_vecLastMovementImpulses CPlayer_MovementServices::m_pButtonPressedCmdNumber
+            else if (legacy == false) {
+                const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+                const auto mservices = drivermem::read_memory<std::uintptr_t>(driver, local_player_pawn + C_BasePlayerPawn::m_pMovementServices);
+                const auto lvec = drivermem::read_memory<Vector3>(driver, mservices + CPlayer_MovementServices::m_vecLastMovementImpulses);//CPlayer_MovementServices::m_flLeftMove);
+                const auto buttoncmd = drivermem::read_memory<uint32_t>(driver, mservices + CPlayer_MovementServices::m_pButtonPressedCmdNumber);
+                const auto mvecqang = drivermem::read_memory<Vector3>(driver, local_player_pawn + C_BasePlayerPawn::m_vOldOrigin);
+                const auto plcontroller = drivermem::read_memory<std::uintptr_t>(driver, local_player_pawn + C_BasePlayerPawn::m_hController);
+                const auto plname = drivermem::read_memory<char>(driver, plcontroller + CBasePlayerController::m_iszPlayerName);
+                //C_BasePlayerPawn::m_hController CBasePlayerController::m_iszPlayerName
+                if (space_pressed) {
+                    if (!in_air) {
+                        counter = 0;
+                        jmpstr = 256;
+                    }
+                    if (in_air) {
+                        if (oldjstr != jmpstr) {
+                            if (jmpstr == 65537) {
+                                if (counter > 3) {
+                                    fjstr = jmpstr;
+                                    oldjstr = jmpstr;
+                                }
+                                counter += 1;
+                            }
+                            else if (jmpstr == 256) {
+                                if (counter > 3) {
+                                    fjstr = jmpstr;
+                                    oldjstr = jmpstr;
+                                }
+                                counter += 1;
+                            }
+                        }
+                        else if (oldjstr == jmpstr) {
+                            if (jmpstr == 65537) {
+                                if (counter > 3) {
+                                    jmpstr = 256;
+                                    fjstr = jmpstr;
+                                    oldjstr = jmpstr;
+                                }
+                                counter += 1;
+                            }
+                            else if (jmpstr == 256) {
+                                if (counter > 3) {
+                                    jmpstr = 65537;
+                                    fjstr = jmpstr;
+                                    oldjstr = jmpstr; 
+                                }
+                                counter += 1;
+                            }
+                        }
+
+                    }
+                
+                if (oldfjstr != jmpstr) {
+                    drivermem::write_memory(driver, client + client_dll::dwForceJump, fjstr);
+                    oldfjstr = jmpstr;
                 }
+                }
+                //drivermem::write_memory(driver, local_player_pawn + C_BasePlayerPawn::m_vOldOrigin, mvecqang + Vector3(0,1,0));
+                
+                
             }
         }
     }
@@ -586,6 +656,8 @@ namespace Cheats
 
     }
 
+    
+
     void TriggerBot() {
         
         enum weaponslist {
@@ -641,9 +713,13 @@ namespace Cheats
             const auto crosshair_ent = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_CSPlayerPawnBase::m_iIDEntIndex); //C_CSPlayerPawnBase::m_iIDEntIndex
             auto myWeapon = drivermem::read_memory<uintptr_t>(driver, LocalPlayerPawn + C_CSPlayerPawnBase::m_pClippingWeapon);
             auto wepindx = drivermem::read_memory<int>(driver, myWeapon + C_EconEntity::m_AttributeManager + C_AttributeContainer::m_Item + C_EconItemView::m_iItemDefinitionIndex);
-            //char tstline1[40];
-            //sprintf_s(tstline1, "%d", myWeapon);
-            //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+            char tstline1[40];
+            sprintf_s(tstline1, "%d", myWeapon);
+            Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+            char tstline[40];
+            sprintf_s(tstline, "%d", wepindx);
+            Render::DrawTextz(200, 240, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
+            const bool legacy = true;
             if (crosshair_ent > 0) {
                 const auto entlist = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwEntityList);
                 const auto entEntry = drivermem::read_memory<std::uintptr_t>(driver, entlist + 0x8 * (crosshair_ent >> 9) + 0x10);
@@ -651,55 +727,67 @@ namespace Cheats
                 const auto Entityteam = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iTeamNum);
                 const auto Playerteam = drivermem::read_memory<std::int32_t>(driver, local_player_pawn + C_BaseEntity::m_iTeamNum);
                 const auto entityHp = drivermem::read_memory<std::int32_t>(driver, entity + C_BaseEntity::m_iHealth);
-                //char tstline[40];
-                //sprintf_s(tstline, "%d", wepindx);
-                //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline);
-
-                if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
-                {
-                    POINT p;
-                    GetCursorPos(&p);
-                    switch (wepindx)
+                if (legacy == true) {
+                    if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
                     {
-                    case 1:
-                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        tmr = 180;
-                        break;
-
-                    case 4:
+                        Sleep(5);
+                        POINT p;
+                        GetCursorPos(&p);
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
                         mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
                         tmr = 100;
-                        break;
-
-                    case 9:
-                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        tmr = 8040;
-                        break;
-                    case 64:
-                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                        //Sleep(80);
-                        //mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        tmr = 200;
-                        break;
-                    default:
-                        Sleep(1);
-                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
-                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
-                        tmr = 100;
-                        break;
                     }
-                        
                 }
-                //else if (Entityteam == Playerteam || Entityteam > 3) {
-                //    POINT p;
-                //    GetCursorPos(&p);
-                //    tmr = -4;
-                //    mrls = -4;
-                //}
-                
+                if (legacy == false) {
+                    if (entityHp > 0 && Entityteam != Playerteam && tmr <= 0)
+                    {
+                        POINT p;
+                        GetCursorPos(&p);
+                        switch (wepindx)
+                        {
+                        case 1:
+                            mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                            mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                            tmr = 180;
+                            break;
+
+                        case 4:
+                            mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                            mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                            tmr = 100;
+                            break;
+
+                        case 9:
+                            mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                            mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                            tmr = 840;
+                            break;
+                        case 40:
+                            mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                            mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                            tmr = 240;
+                            break;
+                        case 64:
+                            mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                            //Sleep(80);
+                             //mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                            tmr = 200;
+                            break;
+                        default:
+                            mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                            mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                            tmr = 100;
+                            break;
+                        }
+
+                    }
+                    else if (Entityteam == Playerteam || Entityteam > 3) {
+                        POINT p;
+                        GetCursorPos(&p);
+                        tmr = -4;
+                        mrls = -4;
+                    }
+                }
             
             }
             if (tmr > 0) {

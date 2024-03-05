@@ -1,0 +1,531 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C6387",
+          "message": {
+            "text": "\"pTexture\" может быть равен \"0\":  это не соответствует спецификации функции \"ID3D11Device::CreateShaderResourceView\". Самое раннее расположение, где это могло произойти, см. в строке 0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                },
+                "region": {
+                  "startLine": 349,
+                  "startColumn": 9,
+                  "endLine": 349,
+                  "endColumn": 73
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "ImGui_ImplDX11_CreateFontsTexture",
+                  "decoratedName": "?ImGui_ImplDX11_CreateFontsTexture@@YAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 314,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 315,
+                            "startColumn": 26
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 316,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 317,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 317,
+                            "startColumn": 16
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 318,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 322,
+                            "startColumn": 30
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 323,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 324,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 325,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 326,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 327,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 328,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 329,
+                            "startColumn": 31
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 330,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 331,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 332,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 334,
+                            "startColumn": 26
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 335,
+                            "startColumn": 32
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 336,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 337,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 338,
+                            "startColumn": 38
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 339,
+                            "startColumn": 40
+                          }
+                        },
+                        "message": {
+                          "text": "\"pTexture\" может быть равно NULL"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ],
+                      "importance": "essential"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 343,
+                            "startColumn": 41
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 344,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 345,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 346,
+                            "startColumn": 31
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 347,
+                            "startColumn": 37
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 348,
+                            "startColumn": 43
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+                          },
+                          "region": {
+                            "startLine": 349,
+                            "startColumn": 49
+                          }
+                        },
+                        "message": {
+                          "text": "\"pTexture\" не должно равняться NULL, поскольку это не соответствует SAL-аннотации для \"ID3D11Device::CreateShaderResourceView\""
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.39.33522.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/ImGui/imgui_impl_dx11.cpp"
+          },
+          "roles": [
+            "analysisTarget",
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "772f890f1a20a670c70ff826c723c87055f38584b896d81610498ddaaf230c30"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui.h"
+          },
+          "hashes": {
+            "sha-256": "9208fc6a73d9987676fd0dbd7a0bb9b2fa884b10f98e1fa5f7623e6160502e7a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imconfig.h"
+          },
+          "hashes": {
+            "sha-256": "260dace38975aa8acc2d16fb60aa1c1f785046f2a4fe06c4ef35ef8ee65c9c8a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui_impl_dx11.h"
+          },
+          "hashes": {
+            "sha-256": "c350abd100f3eb6c028f35165be1dbb8c777a6898a28c1b5894b8242e692efc1"
+          }
+        }
+      ]
+    }
+  ]
+}

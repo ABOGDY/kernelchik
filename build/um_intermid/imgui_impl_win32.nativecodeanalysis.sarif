@@ -1,0 +1,59 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.39.33522.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui_impl_win32.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "a72d265eed1aed910aa4cf9d1071c4905f3fea107851e4d35ba3f4da795d567e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui.h"
+          },
+          "hashes": {
+            "sha-256": "9208fc6a73d9987676fd0dbd7a0bb9b2fa884b10f98e1fa5f7623e6160502e7a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imconfig.h"
+          },
+          "hashes": {
+            "sha-256": "260dace38975aa8acc2d16fb60aa1c1f785046f2a4fe06c4ef35ef8ee65c9c8a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui_impl_win32.h"
+          },
+          "hashes": {
+            "sha-256": "19a655109d84a01e8f1a15e7d1b8c9c265a9cac2fabab741050a79e40029ccfb"
+          }
+        }
+      ]
+    }
+  ]
+}

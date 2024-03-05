@@ -1,0 +1,1393 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C6284",
+          "message": {
+            "text": "В качестве параметра _Param_(3) передан объект, хотя при вызове \"sprintf_s\" требуется строка; фактический тип: \"struct Cheats::espLoop::CSEntity\"."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/Cheats.hpp"
+                },
+                "region": {
+                  "startLine": 217,
+                  "startColumn": 13,
+                  "endLine": 217,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Cheats::espLoop",
+                  "decoratedName": "?espLoop@Cheats@@YAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6273",
+          "message": {
+            "text": "Нецелое число передается как _Param _ (3), когда целое число требуется для вызова \"sprintf_s\". Фактический тип: \"float\"."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/Cheats.hpp"
+                },
+                "region": {
+                  "startLine": 648,
+                  "startColumn": 9,
+                  "endLine": 648,
+                  "endColumn": 35
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Cheats::AimBot",
+                  "decoratedName": "?AimBot@Cheats@@YAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6273",
+          "message": {
+            "text": "Нецелое число передается как _Param _ (3), когда целое число требуется для вызова \"sprintf_s\". Фактический тип: \"float\"."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/Cheats.hpp"
+                },
+                "region": {
+                  "startLine": 649,
+                  "startColumn": 9,
+                  "endLine": 649,
+                  "endColumn": 35
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Cheats::AimBot",
+                  "decoratedName": "?AimBot@Cheats@@YAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6273",
+          "message": {
+            "text": "Нецелое число передается как _Param _ (3), когда целое число требуется для вызова \"sprintf_s\". Фактический тип: \"float\"."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/Cheats.hpp"
+                },
+                "region": {
+                  "startLine": 650,
+                  "startColumn": 9,
+                  "endLine": 650,
+                  "endColumn": 35
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Cheats::AimBot",
+                  "decoratedName": "?AimBot@Cheats@@YAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6328",
+          "message": {
+            "text": "Несоответствие размера: \"unsigned __int64\" передан в качестве параметра _Param_(3), хотя при вызове \"sprintf_s\" требуется \"int\". "
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/Cheats.hpp"
+                },
+                "region": {
+                  "startLine": 717,
+                  "startColumn": 13,
+                  "endLine": 717,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Cheats::TriggerBot",
+                  "decoratedName": "?TriggerBot@Cheats@@YAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C28251",
+          "message": {
+            "text": "Несогласованная аннотация для \"WinMain\": данный экземпляр содержит нет аннотаций. См. c:\\program files (x86)\\windows kits\\10\\include\\10.0.22621.0\\um\\winbase.h(1037). "
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                },
+                "region": {
+                  "startLine": 75,
+                  "startColumn": 14
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "WinMain",
+                  "decoratedName": "WinMain",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6387",
+          "message": {
+            "text": "\"render_target_view\" может быть равен \"0\":  это не соответствует спецификации функции \"ID3D11DeviceContext::ClearRenderTargetView\". "
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                },
+                "region": {
+                  "startLine": 219,
+                  "startColumn": 5,
+                  "endLine": 219,
+                  "endColumn": 63
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "WinMain",
+                  "decoratedName": "WinMain",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 77,
+                            "startColumn": 48
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 79,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 80,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 81,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 83,
+                            "startColumn": 19
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 84,
+                            "startColumn": 16
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 85,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 86,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 87,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 88,
+                            "startColumn": 19
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 89,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 91,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 93,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 94,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 95,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 98,
+                            "startColumn": 15
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 100,
+                            "startColumn": 30
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 103,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 104,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 106,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 107,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 110,
+                            "startColumn": 11
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 111,
+                            "startColumn": 19
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 114,
+                            "startColumn": 19
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 122,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 126,
+                            "startColumn": 25
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 127,
+                            "startColumn": 49
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 128,
+                            "startColumn": 51
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 129,
+                            "startColumn": 34
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 130,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 131,
+                            "startColumn": 28
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 132,
+                            "startColumn": 28
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 133,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 135,
+                            "startColumn": 25
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 136,
+                            "startColumn": 27
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 137,
+                            "startColumn": 22
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 139,
+                            "startColumn": 32
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 145,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 146,
+                            "startColumn": 25
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 147,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 148,
+                            "startColumn": 28
+                          }
+                        },
+                        "message": {
+                          "text": "\"render_target_view\" равно NULL"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ],
+                      "importance": "essential"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 149,
+                            "startColumn": 22
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 151,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 153,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 154,
+                            "startColumn": 25
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 156,
+                            "startColumn": 8
+                          }
+                        },
+                        "message": {
+                          "text": "Пропустить эту ветвь (предполагается, что \"back_buffer\" равно false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 162,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 163,
+                            "startColumn": 16
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 167,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 168,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 170,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 172,
+                            "startColumn": 23
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 176,
+                            "startColumn": 11
+                          }
+                        },
+                        "message": {
+                          "text": "Войти в этот цикл (предполагается \"1\")"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 178,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 179,
+                            "startColumn": 23
+                          }
+                        },
+                        "message": {
+                          "text": "Пропустить этот цикл (предполагается, что \"PeekMessageW(&msg, 0, 0, 0, 1)\" равно false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 184,
+                            "startColumn": 28
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 185,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 186,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 188,
+                            "startColumn": 14
+                          }
+                        },
+                        "message": {
+                          "text": "Пропустить эту ветвь (предполагается, что \"menu==1\" равно false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 192,
+                            "startColumn": 19
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 195,
+                            "startColumn": 37
+                          }
+                        },
+                        "message": {
+                          "text": "Пропустить эту ветвь (предполагается, что \"GetAsyncKeyState(45)<0\" равно false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 207,
+                            "startColumn": 26
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 208,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 209,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 210,
+                            "startColumn": 22
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 212,
+                            "startColumn": 23
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 213,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 214,
+                            "startColumn": 22
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 215,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 217,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 218,
+                            "startColumn": 39
+                          }
+                        },
+                        "message": {
+                          "text": "\"render_target_view\" является выходными данными из \"ID3D11DeviceContext::OMSetRenderTargets\" (объявлено в c:\\program files (x86)\\windows kits\\10\\include\\10.0.22621.0\\um\\d3d11.h:7952)"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 219,
+                            "startColumn": 42
+                          }
+                        },
+                        "message": {
+                          "text": "\"render_target_view\" является аргументом ввода-вывода для \"ID3D11DeviceContext::ClearRenderTargetView\" (объявлено в c:\\program files (x86)\\windows kits\\10\\include\\10.0.22621.0\\um\\d3d11.h: 8088)"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+                          },
+                          "region": {
+                            "startLine": 219,
+                            "startColumn": 42
+                          }
+                        },
+                        "message": {
+                          "text": "\"render_target_view\" не должно равняться NULL, поскольку это не соответствует SAL-аннотации для \"ID3D11DeviceContext::ClearRenderTargetView\""
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.39.33522.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/Cheats.hpp"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "ebf3f760341ebde686fa61c6c291078157ce037871fe72f9f4e61805529d68e4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/Users/keks/source/gitchik/kernelchik/um/src/main.cpp"
+          },
+          "roles": [
+            "analysisTarget",
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "32b6ceee2320f9d26c237c8474ed32d92278138e166a9e784dead6ea5e6080af"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui_impl_win32.h"
+          },
+          "hashes": {
+            "sha-256": "19a655109d84a01e8f1a15e7d1b8c9c265a9cac2fabab741050a79e40029ccfb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui.h"
+          },
+          "hashes": {
+            "sha-256": "9208fc6a73d9987676fd0dbd7a0bb9b2fa884b10f98e1fa5f7623e6160502e7a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imconfig.h"
+          },
+          "hashes": {
+            "sha-256": "260dace38975aa8acc2d16fb60aa1c1f785046f2a4fe06c4ef35ef8ee65c9c8a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/imgui/imgui_impl_dx11.h"
+          },
+          "hashes": {
+            "sha-256": "c350abd100f3eb6c028f35165be1dbb8c777a6898a28c1b5894b8242e692efc1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/src/offsets/client.dll.hpp"
+          },
+          "hashes": {
+            "sha-256": "42dc96a2b5f261a13d6a14cb32f0cd57e7dfa7e19ffb6a8116c42e2afbbfe4bc"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/src/offsets/offsets.hpp"
+          },
+          "hashes": {
+            "sha-256": "45db720268369e441c941878ec642bea2d99093fe3984a43d177b8355c3d23b2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/src/vector.hpp"
+          },
+          "hashes": {
+            "sha-256": "c3b9a0dc9af3e60979ec9547bc737d05dda84962697c8f7f6d9da354eb789fa2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/src/global.hpp"
+          },
+          "hashes": {
+            "sha-256": "01fa9904d554cc009cfce399e3a6b00d1a71b342dad28de93478a55154d7733f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/keks/source/gitchik/kernelchik/um/src/render.hpp"
+          },
+          "hashes": {
+            "sha-256": "035f9e05fc2998eb8786ed71be8d43364cef9c15c7633ae610162993486e3b46"
+          }
+        }
+      ]
+    }
+  ]
+}
