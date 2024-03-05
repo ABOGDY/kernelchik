@@ -73,18 +73,6 @@ LRESULT CALLBACK window_procedure(HWND window, UINT message, WPARAM w_param, LPA
 
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
-	std::cout << "bebra \n";
-	if (pid == 0) {
-		std::cout << "Failed to find cs2 \n";
-		std::cin.get();
-		return 1;
-	}
-
-	if (driver == INVALID_HANDLE_VALUE) {
-		std::cout << "Failed to create driver handle \n";
-		std::cin.get();
-		return 1;
-	}
 	
 	if (drivermem::attach_to_process(driver, pid) == true)
 	{
@@ -93,8 +81,6 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 		const std::uintptr_t engine = get_module_base(pid, L"engine2.dll");
 
 		if (client != 0 && engine != 0) {
-			std::cout << "Client found! \n";
-			//Overlay Start
 			WNDCLASSEXA wc{};
 			wc.cbSize = sizeof(WNDCLASSEXW);
 			wc.style = CS_CLASSDC;
@@ -112,16 +98,18 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 			const HWND Overlay = CreateWindowExA(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED, wc.lpszClassName, " ", WS_POPUP, rect.left+8, rect.bottom - screenHeight-8, screenWidth, screenHeight, nullptr, nullptr, wc.hInstance, nullptr);
 
 			SetLayeredWindowAttributes(Overlay, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
-
+			//SetLayeredWindowAttributes(windhndl, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 			{
 				RECT client_area1{};
 				GetClientRect(Overlay, &client_area1);
-
+				//GetClientRect(windhndl, &client_area1);
 				RECT window_area1{};
 				GetWindowRect(Overlay, &window_area1);
+				//GetWindowRect(windhndl, &window_area1);
 
 				POINT diff1{};
 				ClientToScreen(Overlay, &diff1);
+				//ClientToScreen(windhndl, &diff1);
 
 				const MARGINS margins1
 				{
@@ -130,18 +118,20 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 					client_area1.right,
 					client_area1.bottom
 				};
-
+				
 				DwmExtendFrameIntoClientArea(Overlay, &margins1);
+				//DwmExtendFrameIntoClientArea(windhndl, &margins1);
 			}
 
 			DXGI_SWAP_CHAIN_DESC overlayDesc{};
-			overlayDesc.BufferDesc.RefreshRate.Numerator = 300U; //fps
+			overlayDesc.BufferDesc.RefreshRate.Numerator = 140U; //fps
 			overlayDesc.BufferDesc.RefreshRate.Denominator = 1U;
 			overlayDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			overlayDesc.SampleDesc.Count = 1U;
 			overlayDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			overlayDesc.BufferCount = 2U;
 			overlayDesc.OutputWindow = Overlay;
+			//overlayDesc.OutputWindow = windhndl;
 			overlayDesc.Windowed = TRUE;
 			overlayDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			overlayDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -168,14 +158,17 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				device->CreateRenderTargetView(back_buffer, nullptr, &render_target_view);
 				back_buffer->Release();
 			}
-
+			
 			ShowWindow(Overlay, cmd_show);
 			UpdateWindow(Overlay);
+			//ShowWindow(windhndl, cmd_show);
+			//UpdateWindow(windhndl);
 
 			ImGui::CreateContext();
 			ImGui::StyleColorsClassic();
 
 			ImGui_ImplWin32_Init(Overlay);;
+			//ImGui_ImplWin32_Init(windhndl);;
 			ImGui_ImplDX11_Init(device, device_context);
 
 			
@@ -194,8 +187,10 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 
 				if (menu == true)
 					SetWindowLong(Overlay, GWL_EXSTYLE, WS_EX_TRANSPARENT | WS_EX_TOPMOST);
+					//SetWindowLong(windhndl, GWL_EXSTYLE, WS_EX_TRANSPARENT | WS_EX_TOPMOST);
 				else
 					SetWindowLong(Overlay, GWL_EXSTYLE, WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
+					//SetWindowLong(windhndl, GWL_EXSTYLE, WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
 
 				if (GetAsyncKeyState(VK_INSERT) < 0)
 				{

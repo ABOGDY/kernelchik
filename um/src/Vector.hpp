@@ -150,24 +150,27 @@ struct Vector3
 
 	Vector3 WorldtoScreen(view_matrix_t matrix) const
 	{
-		float _x = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z + matrix[0][3];
-		float _y = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2] * z + matrix[1][3];
 		float w = matrix[3][0] * x + matrix[3][1] * y + matrix[3][2] * z + matrix[3][3];
 
-		if (w < 0.001f)
-			return 0;
+		if (w > 0.001f) {
+			float _x = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z + matrix[0][3];
+			float _y = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2] * z + matrix[1][3];
 
-		float inv_w = 1.f / w;
-		_x *= inv_w;
-		_y *= inv_w;
 
-		float screen_x = screenWidth * 0.5f;
-		float screen_y = screenHeight * 0.5f;
+			float screen_x = screenWidth * 0.5f;
+			float screen_y = screenHeight * 0.5f;
 
-		screen_x += 0.5f * _x * screenWidth + 0.5f;
-		screen_y -= 0.5f * _y * screenHeight + 0.5f;
+			float resx = screen_x + (screen_x * _x / w);
+			float resy = screen_y - (screen_y * _y / w);
 
-		return { screen_x,screen_y,w };
+			//screen_x += 0.5f * _x * screenWidth + 0.5f;
+			//screen_y -= 0.5f * _y * screenHeight + 0.5f;
+
+			return { resx,resy,w };
+		}
+		else {
+			return Vector3(0,0,0);
+		}
 	}
 	// struct data
 	float x, y, z;
