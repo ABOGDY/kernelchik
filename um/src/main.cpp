@@ -1,4 +1,4 @@
-﻿#define _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <dwmapi.h>
 #include <d3d11.h>
@@ -196,7 +196,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 				{
 					if (menu == false) {
 						menu = true;
-						PlaySoundA((LPCSTR)"C:\\rizz.wav", NULL, SND_FILENAME | SND_ASYNC);
+						PlaySoundA((LPCSTR)"C:\\hitsound.wav", NULL, SND_FILENAME | SND_ASYNC);
 					}
 					else {
 						menu = false;
