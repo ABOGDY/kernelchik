@@ -49,6 +49,7 @@ namespace Cheats
         //float diffanglrady = (mousemov.y) * (180.0 / M_PI) * multplr;
 
         Vector2 diffangl = Vector2(0, 0);//-diffanglradx, -diffanglrady); //
+<<<<<<< HEAD
         //char tstline1[40];
         //char tstline2[40];
         //char tstline3[40];
@@ -57,6 +58,16 @@ namespace Cheats
         //sprintf_s(tstline3, "%f", nangle.z);
         //Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
         //Render::DrawTextz(200, 190, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+=======
+        char tstline1[40];
+        char tstline2[40];
+        //char tstline3[40];
+        sprintf_s(tstline1, "%f", diffanglradx);
+        sprintf_s(tstline2, "%f", diffanglrady);
+        //sprintf_s(tstline3, "%f", nangle.z);
+        Render::DrawTextz(200, 200, ImColor(1.f, 0.f, 0.f, 1.f), tstline1);
+        Render::DrawTextz(200, 190, ImColor(1.f, 0.f, 0.f, 1.f), tstline2);
+>>>>>>> 2895b3fe963cf7ffe88b60b3caf9070c168a5f08
         //Render::DrawTextz(200, 180, ImColor(1.f, 0.f, 0.f, 1.f), tstline3);
         for (int i = 1; i < 64; i++)
         {
@@ -315,6 +326,7 @@ namespace Cheats
         //const std::uintptr_t engine = Engine;
         const auto local_player_cont = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerController);
         static bool bToggled = false;
+<<<<<<< HEAD
         drivermem::write_memory(driver, local_player_cont + CBasePlayerController::m_iDesiredFOV, FOV);
         if (FovButton == false) {
             FOV = 90;
@@ -330,6 +342,23 @@ namespace Cheats
             //if (!isScoped && currentFOV != FOV) {
             //    drivermem::write_memory(driver, cameraServices + CCSPlayerBase_CameraServices::m_iFOV, FOV);
             //}
+=======
+        //drivermem::write_memory(driver, local_player_cont + CBasePlayerController::m_iDesiredFOV, FOV);
+        //if (FovButton == false) {
+        //    FOV = 90;
+        //}
+        
+        const auto local_player_pawn = drivermem::read_memory<std::uintptr_t>(driver, client + client_dll::dwLocalPlayerPawn);
+        //static bool bToggled = false;
+
+        auto cameraServices = drivermem::read_memory<std::uintptr_t>(driver, local_player_pawn + C_BasePlayerPawn::m_pCameraServices);
+        const auto currentFOV = drivermem::read_memory<uint32_t>(driver, cameraServices + CCSPlayerBase_CameraServices::m_iFOV);
+
+        bool isScoped = drivermem::read_memory<bool>(driver, local_player_pawn + C_CSPlayerPawnBase::m_bIsScoped);
+            if (!isScoped && currentFOV != FOV) {
+                drivermem::write_memory(driver, cameraServices + CCSPlayerBase_CameraServices::m_iFOV, FOV);
+            }
+>>>>>>> 2895b3fe963cf7ffe88b60b3caf9070c168a5f08
         
     }
 
@@ -354,7 +383,11 @@ namespace Cheats
             const bool in_air = flags & (1 << 0);
             const bool space_pressed = GetAsyncKeyState(VK_SPACE) & 0x8000;
             const auto force_jump = drivermem::read_memory<DWORD>(driver, client + client_dll::dwForceJump);
+<<<<<<< HEAD
             const bool legacy = true;
+=======
+            const bool legacy = false;
+>>>>>>> 2895b3fe963cf7ffe88b60b3caf9070c168a5f08
 
             if (legacy == true) {
                 if (space_pressed && in_air) {
@@ -736,6 +769,27 @@ namespace Cheats
                         mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
                         mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
                         tmr = 100;
+<<<<<<< HEAD
+=======
+                        break;
+
+                    case 9:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 8040;
+                        break;
+                    case 64:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        //Sleep(80);
+                        //mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 200;
+                        break;
+                    default:
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, p.x, p.y, 0, 0);
+                        mouse_event(MOUSEEVENTF_LEFTUP, p.x, p.y, 0, 0);
+                        tmr = 100;
+                        break;
+>>>>>>> 2895b3fe963cf7ffe88b60b3caf9070c168a5f08
                     }
                 }
                 if (legacy == false) {

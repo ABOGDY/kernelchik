@@ -121,10 +121,13 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+<<<<<<< HEAD
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <IntelJCCErratum>true</IntelJCCErratum>
+=======
+>>>>>>> 2895b3fe963cf7ffe88b60b3caf9070c168a5f08
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
